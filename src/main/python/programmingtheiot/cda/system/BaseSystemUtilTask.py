@@ -6,6 +6,7 @@
 # implementation for the Programming the Internet of Things exercises,
 # and designed to be modified by the student as needed.
 #
+import logging
 
 from programmingtheiot.data.SensorData import SensorData
 
@@ -30,7 +31,9 @@ class BaseSystemUtilTask():
 		pass
 		
 	def getTelemetryValue(self) -> float:
-		pass
+		val = self._getSystemUtil()
+		logging.info("Sensor Value is %s",val )
+		return val
 	
 	def _getSystemUtil(self) -> float:
 		"""

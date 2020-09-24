@@ -33,6 +33,7 @@ class SystemMemUtilTaskTest(unittest.TestCase):
 	def tearDown(self):
 		pass
 
+	@unittest.skip("Ignore for now.")
 	def testGenerateTelemetry(self):
 		sd = self.memUtilTask.generateTelemetry()
 		
@@ -40,6 +41,7 @@ class SystemMemUtilTaskTest(unittest.TestCase):
 		self.assertGreaterEqual(sd.getValue(), 0.0)
 		logging.info("Virtual memory SensorData: %s", str(sd))
 			
+	
 	def testGetTelemetryValue(self):
 		val = self.memUtilTask.getTelemetryValue()
 		

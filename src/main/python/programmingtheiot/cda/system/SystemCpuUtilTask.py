@@ -19,8 +19,8 @@ class SystemCpuUtilTask(BaseSystemUtilTask):
 	"""
 
 	def __init__(self):
-		pass
+		super(SystemCpuUtilTask, self).__init__()
 	
 	def _getSystemUtil(self) -> float:
-		pass
+		return psutil.cpu_percent()
 		
