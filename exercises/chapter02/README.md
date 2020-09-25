@@ -27,7 +27,7 @@ NOTE: Include one or more UML designs representing your solution. It's expected 
 diagram you provide will look similar to, but not the same as, its counterpart in the
 book [Programming the IoT](https://learning.oreilly.com/library/view/programming-the-internet/9781492081401/).
 
-![UML Diagram](Capture2-2.JPG "UML")
+![UML Diagram](Capture2-1.JPG "UML")
 
 ### Unit Tests Executed
 
