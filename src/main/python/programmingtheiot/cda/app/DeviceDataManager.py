@@ -23,6 +23,12 @@ from programmingtheiot.data.ActuatorData import ActuatorData
 from programmingtheiot.data.SensorData import SensorData
 from programmingtheiot.data.SystemPerformanceData import SystemPerformanceData
 
+from programmingtheiot.common.ConfigUtil import ConfigUtil
+from programmingtheiot.common import ConfigConst
+from programmingtheiot.data.DataUtil import DataUtil
+
+
+
 class DeviceDataManager(IDataMessageListener):
 	"""
 	Shell representation of class for student implementation.
@@ -30,25 +36,50 @@ class DeviceDataManager(IDataMessageListener):
 	"""
 	
 	def __init__(self, enableMqtt: bool = True, enableCoap: bool = False):
-		pass
+		self.sysPerfManager = SystemPerformanceManager()
+		self.sensorAdapterManager = SensorAdapterManager()
+		self.actuatorAdapterManager = ActuatorAdapterManager()
+		self.configUtil = ConfigUtil()
+		self.enableHandleTempChangeOnDevice = self.configUtil.getBoolean(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.ENABLE_HANDLE_TEMP_CHANGE_ON_DEVICE_KEY)
+		self.triggerHvacTempFloor = self.configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.TRIGGER_HVAC_TEMP_FLOOR_KEY)
+		self.triggerHvacTempCeiling = self.configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.TRIGGER_HVAC_TEMP_CEILING_KEY)
+
 			
 	def handleActuatorCommandResponse(self, data: ActuatorData) -> bool:
+		logging("handleActuatorCommandResponse method is called...")
+		self._handleUpstreamTransmission(ResourceNameEnum.CDA_ACTUATOR_RESPONSE_RESOURCE, DataUtil.actuatorDataToJson(self, data))
 		pass
+
 	
 	def handleIncomingMessage(self, resourceEnum: ResourceNameEnum, msg: str) -> bool:
+		logging("handleIncomingMessage method is called...") 
+		self._handleIncomingDataAnalysis(DataUtil.jsonToActuatorData(self, msg))
 		pass
 
 	def handleSensorMessage(self, data: SensorData) -> bool:
-		pass
+			logging("handleSensorMessage method is called...")
+			self._handleUpstreamTransmission(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE, DataUtil.sensorDataToJson(self, data))
+			pass
 		
 	def handleSystemPerformanceMessage(self, data: SystemPerformanceData) -> bool:
+		logging("handleSystemPerformanceMessage method is called...")
+		self._handleUpstreamTransmission(ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE, DataUtil.systemPerformanceDataToJson(self, data))
 		pass
+
 	
 	def startManager(self):
+		logging.info("Started DeviceDataManager.")
+		self.sysPerfManager.startManager()
+		self.sensorAdapterManager.startManager()
 		pass
+
 		
 	def stopManager(self):
+		logging.info("Stopped DeviceDataManager.")
+		self.sysPerfManager.stopManager()
+		self.sensorAdapterManager.stopManager()
 		pass
+
 
 	def _handleIncomingDataAnalysis(self, msg: str):
 		"""
@@ -58,6 +89,8 @@ class DeviceDataManager(IDataMessageListener):
 		2) Convert msg: Use DataUtil to convert if appropriate.
 		3) Act on msg: Determine what - if any - action is required, and execute.
 		"""
+		logging("_handleIncomingDataAnalysis method is called...")
+		self.actuatorAdapterManager.sendActuatorCommand(DataUtil.jsonToActuatorData(self, msg))
 		pass
 		
 	def _handleSensorDataAnalysis(self, data: SensorData):
@@ -67,7 +100,13 @@ class DeviceDataManager(IDataMessageListener):
 		1) Check config: Is there a rule or flag that requires immediate processing of data?
 		2) Act on data: If # 1 is true, determine what - if any - action is required, and execute.
 		"""
-		pass
+		logging("_handleSensorDataAnalysis method is called...")
+		if(self.enableHandleTempChangeOnDevice == True):
+			self.actuatorData = ActuatorData ()
+			self.actuatorData.actuator_type = ActuatorData.HVAC_ACTUATOR_TYPE
+			self.actuatorData.COMMAND_ON
+			self.actuatorAdapterManager.sendActuatorCommand(self.actuatorData) 
+			pass
 		
 	def _handleUpstreamTransmission(self, resourceName: ResourceNameEnum, msg: str):
 		"""
@@ -76,4 +115,6 @@ class DeviceDataManager(IDataMessageListener):
 		1) Check connection: Is there a client connection configured (and valid) to a remote MQTT or CoAP server?
 		2) Act on msg: If # 1 is true, send message upstream using one (or both) client connections.
 		"""
+		logging("_handleUpstreamTransmission method is called...")
 		pass
+

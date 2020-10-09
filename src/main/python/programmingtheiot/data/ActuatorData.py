@@ -30,6 +30,7 @@ class ActuatorData(BaseIotData):
 	command = DEFAULT_COMMAND
 	
 	def __init__(self, actuatorType = DEFAULT_ACTUATOR_TYPE, d = None):
+		self.type = actuatorType
 		super(ActuatorData, self).__init__(d = d)
 		
 	
@@ -64,6 +65,6 @@ class ActuatorData(BaseIotData):
 	def _handleUpdateData(self, data):
 		self.command = data.getCommand()
 		self.stateData = data.getStateData()
-		self.value = data.getValue()
+		self.val = data.getValue()
 		
 		

@@ -45,7 +45,7 @@ class HumiditySensorSimTaskTest(unittest.TestCase):
 	#@unittest.skip("Ignore for now.")
 	def testGetTelemetryValue(self):
 		val = self.hSimTask.getTelemetryValue()
-		logging.info("Humidity data: %f", val)
+		logging.info("Humidity value is : %f", val)
 		self.assertGreater(val, 0.0)
 
 if __name__ == "__main__":

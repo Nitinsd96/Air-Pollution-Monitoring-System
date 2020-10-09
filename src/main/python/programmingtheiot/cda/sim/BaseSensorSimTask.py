@@ -43,7 +43,7 @@ class BaseSensorSimTask():
 			newValue = random.randint(self.minVal,self.maxVal)         
 		else:
 			newValue = self.dataSet.getDataEntry(self.currentDataSetIndex)
-			if self.currentDataSetIndex == self.dataSet.getDataEntries():
+			if self.currentDataSetIndex == self.dataSet.getDataEntryCount():
 				self.currentDataSetIndex = 0
 			else:
 				self.currentDataSetIndex = self.currentDataSetIndex+1

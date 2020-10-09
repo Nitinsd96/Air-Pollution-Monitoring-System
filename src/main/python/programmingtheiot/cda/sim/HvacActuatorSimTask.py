@@ -28,5 +28,6 @@ class HvacActuatorSimTask(BaseActuatorSimTask):
 	def deactivateActuator(self) -> bool:
 		pass
 		
-	def updateActuator(self, data: ActuatorData) -> ActuatorData:
-		pass
+	#def updateActuator(self, data: ActuatorData) -> ActuatorData:
+	#	super().updateActuator(data)
+		

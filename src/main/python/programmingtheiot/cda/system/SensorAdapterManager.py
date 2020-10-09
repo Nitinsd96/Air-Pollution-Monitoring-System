@@ -15,6 +15,13 @@ from programmingtheiot.common.IDataMessageListener import IDataMessageListener
 
 from programmingtheiot.cda.sim.TemperatureSensorSimTask import TemperatureSensorSimTask
 from programmingtheiot.cda.sim.HumiditySensorSimTask import HumiditySensorSimTask
+from programmingtheiot.cda.sim.PressureSensorSimTask import PressureSensorSimTask 
+
+
+from programmingtheiot.cda.sim.SensorDataGenerator import SensorDataGenerator
+from programmingtheiot.common.ConfigUtil import ConfigUtil
+from programmingtheiot.common import ConfigConst
+
 
 class SensorAdapterManager(object):
 	"""
@@ -27,26 +34,68 @@ class SensorAdapterManager(object):
 		self.pollRate = pollRate
 		
 		self.dataMsgListener = 0
+		self.allowConfigOverride = allowConfigOverride
 		
 		self.scheduler = BackgroundScheduler()
 		self.scheduler.add_job(self.handleTelemetry, 'interval', seconds = self.pollRate)
+		
 		if(self.useEmulator == True):
-			logging.info("Emulators will be used")
+			logging.info("Emulators are being used")
 		else:
-			logging.info("simulators will be used")
+			logging.info("Simulators are being used")
 			self.dataGenerator = SensorDataGenerator()
 			configUtil = ConfigUtil()
-			humidityFloor = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.HUMIDITY_SIM_FLOOR_KEY, SensorDataGenerator.LOW_NORMAL_ENV_HUMIDITY)
-			humidityCeiling = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.HUMIDITY_SIM_CEILING_KEY, SensorDataGenerator.HI_NORMAL_ENV_HUMIDITY)
+			
+		humidity_floor = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.HUMIDITY_SIM_FLOOR_KEY, SensorDataGenerator.LOW_NORMAL_ENV_HUMIDITY)
+		humidity_ceiling = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.HUMIDITY_SIM_CEILING_KEY, SensorDataGenerator.HI_NORMAL_ENV_HUMIDITY)
 
+		pressure_Floor = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.PRESSURE_SIM_FLOOR_KEY, SensorDataGenerator.LOW_NORMAL_ENV_PRESSURE)
+		pressure_ceiling = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.PRESSURE_SIM_CEILING_KEY, SensorDataGenerator.HI_NORMAL_ENV_PRESSURE)
+
+		temp_floor = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.TEMP_SIM_FLOOR_KEY, SensorDataGenerator.LOW_NORMAL_INDOOR_TEMP)
+		temp_ceiling = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.TEMP_SIM_CEILING_KEY, SensorDataGenerator.HI_NORMAL_INDOOR_TEMP)
+
+
+		self.humidityData = self.dataGenerator.generateDailyEnvironmentHumidityDataSet(minValue = humidity_floor, maxValue = humidity_ceiling, useSeconds = False)
+
+		self.pressureData = self.dataGenerator.generateDailyEnvironmentPressureDataSet(minValue=pressure_Floor, maxValue = pressure_ceiling, useSeconds = False)
+
+		self.tempData =  self.dataGenerator.generateDailyIndoorTemperatureDataSet(minValue = temp_floor, maxValue = temp_ceiling, useSeconds = False)
+
+		self.humiditySensorSimTask = HumiditySensorSimTask(self.humidityData) 
+		self.pressureSensorSimTask = PressureSensorSimTask(self.pressureData)
+		self.temperatureSensorSimTask = TemperatureSensorSimTask(self.tempData)
+
+		logging.info("Simulated Humidity Sensor Sim Task Value is: %s ", self.humiditySensorSimTask.LatestSensorData)
+		logging.info("Simulated Pressure Sensor Sim Task Value is : %s ", self.pressureSensorSimTask.LatestSensorData)
+		logging.info("Simulated Temperature Sensor Sim Task Value is: %s ", self.temperatureSensorSimTask.LatestSensorData)
+		self.handleTelemetry()
+		pass	
+
+
+		
+		
 	def handleTelemetry(self):
+		if(self.useEmulator == False):
+			self.humiditySensorSimTask.generateTelemetry()
+		logging.info("Simulated Humidity Sensor value is %s ",self.humiditySensorSimTask.getTelemetryValue())
+		self.pressureSensorSimTask.generateTelemetry()
+		logging.info("Simulated Pressure Sensor value is %s ",self.pressureSensorSimTask.getTelemetryValue())
+		self.temperatureSensorSimTask.generateTelemetry()
+		logging.info("Simulated Temperature Sensor value is %s ",self.temperatureSensorSimTask.getTelemetryValue())
 		pass
+
+
 		
 	def setDataMessageListener(self, listener: IDataMessageListener) -> bool:
+		if( listener != None):
+				self.dataMsgListener = listener
 		pass
 	
 	def startManager(self):
+		self.scheduler.start()
 		pass
 		
 	def stopManager(self):
+		self.scheduler.shutdown()
 		pass

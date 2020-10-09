@@ -129,7 +129,7 @@ class BaseIotData(object):
 		customStr = \
 			str('name='	+ self.name + \
 			',timeStamp=' + self.timeStamp + \
-			',hasError=' + self.hasError + \
+			',hasError=' + str(self.hasError) + \
 			',statusCode=' + str(self.statusCode))
 					
 		return customStr

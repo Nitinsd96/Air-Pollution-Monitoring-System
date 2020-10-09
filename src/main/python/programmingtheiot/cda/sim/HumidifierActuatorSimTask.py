@@ -29,6 +29,7 @@ class HumidifierActuatorSimTask(BaseActuatorSimTask):
 	def deactivateActuator(self) -> bool:
 		pass
 		
-	def updateActuator(self, data: ActuatorData) -> ActuatorData:
-		super().updateActuator(data)
-		pass
+	#def updateActuator(self, data: ActuatorData) -> ActuatorData:
+	#	super().updateActuator(data)
+	#	return 
+
