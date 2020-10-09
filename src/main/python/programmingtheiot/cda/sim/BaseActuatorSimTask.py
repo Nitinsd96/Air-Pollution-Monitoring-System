@@ -19,12 +19,21 @@ class BaseActuatorSimTask():
 	"""
 
 	def __init__(self, actuatorType: int = ActuatorData.DEFAULT_ACTUATOR_TYPE, simpleName: str = "Actuator"):
+		self.actuatorType = actuatorType
+		self.simpleName = simpleName
+		self.latestActuatorData = ActuatorData(actuatorType)
 		pass
 		
 	def activateActuator(self, val: float) -> bool:
+		logging.info("Sending Actuator On Command")
+		self.latestActuatorData.setCommand(ActuatorData.COMMAND_ON)
+		return True
 		pass
 		
 	def deactivateActuator(self) -> bool:
+		logging.info("Sending Actuator Off Command")
+		self.latestActuatorData.setCommand(ActuatorData.COMMAND_OFF)
+		return False
 		pass
 		
 	def getLatestActuatorResponse(self) -> ActuatorData:
@@ -34,5 +43,14 @@ class BaseActuatorSimTask():
 		pass
 	
 	def updateActuator(self, data: ActuatorData) -> bool:
-		pass
+		if data != None:
+			if (data.command == 0):
+				self.deactivateActuator()
+			else:
+				self.activateActuator(data.val)
 		
+		self.latestActuatorData = data
+		self.latestActuatorData.setStatusCode(data.getStatusCode())
+		self.latestActuatorData.setAsResponse()
+		return True
+		pass

@@ -14,7 +14,7 @@ class SensorData(BaseIotData):
 	Shell representation of class for student implementation.
 	
 	"""
-	DEFAULT_VAL = 0.0
+	DEFAULT_VAL = 10.0
 	DEFAULT_SENSOR_TYPE = 0
 	
 	# These are just sensor type samples - these can be changed however
@@ -22,10 +22,13 @@ class SensorData(BaseIotData):
 	HUMIDITY_SENSOR_TYPE = 1
 	PRESSURE_SENSOR_TYPE = 2
 	TEMP_SENSOR_TYPE = 3
-		
+	
+	newVal = DEFAULT_VAL
+	
 	def __init__(self, sensorType = DEFAULT_SENSOR_TYPE, d = None):
 		super(SensorData, self).__init__(d = d)
-		pass
+		"i added"
+		
 	
 	def getSensorType(self) -> int:
 		"""
@@ -36,10 +39,13 @@ class SensorData(BaseIotData):
 		return self.sensorType
 	
 	def getValue(self) -> float:
-		pass
+		
+		"i added"
+		return self.newVal
+		
 	
 	def setValue(self, newVal: float):
-		pass
-		
+		self.newVal = newVal
+	
 	def _handleUpdateData(self, data):
-		pass
+		self.newVal = data.setValue()

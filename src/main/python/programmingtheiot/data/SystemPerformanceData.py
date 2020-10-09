@@ -8,6 +8,7 @@
 #
 
 from programmingtheiot.data.BaseIotData import BaseIotData
+from numpy.distutils.cpuinfo import cpu
 
 class SystemPerformanceData(BaseIotData):
 	"""
@@ -16,27 +17,35 @@ class SystemPerformanceData(BaseIotData):
 	"""
 	DEFAULT_VAL = 0.0
 	
+	diskUtil = DEFAULT_VAL
+	cpuUtil = DEFAULT_VAL
+	memUtil = DEFAULT_VAL
+	
 	def __init__(self, d = None):
 		super(SystemPerformanceData, self).__init__(d = d)
 		pass
 	
 	def getCpuUtilization(self):
-		pass
+		return self.cpuUtil
 	
 	def getDiskUtilization(self):
-		pass
+		return self.diskUtil
 	
 	def getMemoryUtilization(self):
-		pass
+		return self.memUtil
 	
 	def setCpuUtilization(self, cpuUtil):
-		pass
+		self.cpuUtil = cpuUtil
 	
 	def setDiskUtilization(self, diskUtil):
-		pass
+		self.diskUtil  = diskUtil
+
 	
 	def setMemoryUtilization(self, memUtil):
-		pass
+		self.memUtil = memUtil
 	
 	def _handleUpdateData(self, data):
-		pass
+		self.memUtil = data.getMemoryUtilization()
+		self.diskUtil = data.getDiskUtilization()
+		self.cpuUtil = data.getCpuUtilization()
+		

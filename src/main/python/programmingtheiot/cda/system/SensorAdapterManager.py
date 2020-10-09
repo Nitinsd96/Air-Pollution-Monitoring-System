@@ -22,8 +22,22 @@ class SensorAdapterManager(object):
 	
 	"""
 
-	def __init__(self, useEmulator: bool = False, pollRate: int = 60):
-		pass
+	def __init__(self, useEmulator: bool = False, pollRate: int = 5, allowConfigOverride: bool = True):
+		self.useEmulator = useEmulator
+		self.pollRate = pollRate
+		
+		self.dataMsgListener = 0
+		
+		self.scheduler = BackgroundScheduler()
+		self.scheduler.add_job(self.handleTelemetry, 'interval', seconds = self.pollRate)
+		if(self.useEmulator == True):
+			logging.info("Emulators will be used")
+		else:
+			logging.info("simulators will be used")
+			self.dataGenerator = SensorDataGenerator()
+			configUtil = ConfigUtil()
+			humidityFloor = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.HUMIDITY_SIM_FLOOR_KEY, SensorDataGenerator.LOW_NORMAL_ENV_HUMIDITY)
+			humidityCeiling = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.HUMIDITY_SIM_CEILING_KEY, SensorDataGenerator.HI_NORMAL_ENV_HUMIDITY)
 
 	def handleTelemetry(self):
 		pass

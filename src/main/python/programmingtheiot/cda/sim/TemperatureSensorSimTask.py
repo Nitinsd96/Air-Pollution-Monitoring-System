@@ -20,12 +20,12 @@ class TemperatureSensorSimTask(BaseSensorSimTask):
 	
 	"""
 
-	def __init__(self):
-		pass
+	def __init__(self,dataSet = None):
+		super(TemperatureSensorSimTask, self).__init__(SensorData.TEMP_SENSOR_TYPE, dataSet = dataSet, minVal = SensorDataGenerator.LOW_NORMAL_INDOOR_TEMP, maxVal = SensorDataGenerator.HI_NORMAL_INDOOR_TEMP)
 	
-	def generateTelemetry(self) -> SensorData:
-		pass
+	#def generateTelemetry(self) -> SensorData:
+	#	pass
 	
-	def getTelemetryValue(self) -> float:
-		pass
+	#def getTelemetryValue(self) -> float:
+	#	pass
 	
