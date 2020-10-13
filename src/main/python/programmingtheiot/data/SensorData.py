@@ -48,4 +48,5 @@ class SensorData(BaseIotData):
 		self.newVal = newVal
 	
 	def _handleUpdateData(self, data):
-		self.newVal = data.setValue()
+		self.newVal = data.getValue()
+		
