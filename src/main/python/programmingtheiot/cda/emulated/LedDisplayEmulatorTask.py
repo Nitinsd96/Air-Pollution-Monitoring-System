@@ -24,8 +24,16 @@ class LedDisplayEmulatorTask(BaseActuatorSimTask):
 	"""
 
 	def __init__(self):
-		pass
+		super(LedDisplayEmulatorTask, self).__init__(actuatorType = ActuatorData.LED_DISPLAY_ACTUATOR_TYPE, simpleName = "LED_Display")
+		#obj = SenseHAT()
+		self.emulate_flag = False
+		if ConfigConst.ENABLE_SENSE_HAT_KEY == False:
+			self.emulate_flag = True 
+		#doubt
+		enableEmulation = ConfigUtil._getConfig()
+		self.sh = SenseHAT(emulate = enableEmulation)
 
 	def _handleActuation(self, cmd: int, val: float = 0.0, stateData: str = None) -> int:
-		pass
-	
+		#if the command is 'ON', scroll the state data across the screen. If the command is 'OFF', clear the LED display.
+		
+		

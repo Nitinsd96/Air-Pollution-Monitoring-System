@@ -30,13 +30,26 @@ class ActuatorAdapterManager(object):
 		self.useEmulator = useEmulator
 		if(self.useEmulator == True):
 			logging("Emulators will be used")
+			
+			humidifierModule = __import__('programmingtheiot.cda.emulated.HumidifierEmulatorTask', fromlist = ['HumidifierEmulatorTask'])
+			hueClazz = getattr(humidifierModule, 'HumidifierEmulatorTask')
+			self.humidifierEmulator = hueClazz()
+			
+			hvacModule = __import__('programmingtheiot.cda.emulated.hvacEmulatorTask', fromlist = ['HvacEmulatorTask'])
+			hueClazz = getattr(hvacModule, 'HvacEmulatorTask')
+			self.hvacEmulator = hueClazz()
+			
+			LedDisplayModule = __import__('programmingtheiot.cda.emulated.LedDisplayEmulatorTask', fromlist = ['LedDIsplayEmulatorTask'])
+			hueClazz = getattr(LedDisplayModule, 'LedEmulatorTask')
+			self.LedDisplayEmulator = hueClazz()
+			
 		else:
 			logging.info("Testing ActuatorAdapterManager class [using simulators]...")
-		# create the humidifier actuator
-		self.humidifierActuator = HumidifierActuatorSimTask()
-		# create the HVAC actuator
-		self.hvacActuator = HvacActuatorSimTask()
-		pass
+			# create the humidifier actuator
+			self.humidifierActuator = HumidifierActuatorSimTask()
+			# create the HVAC actuator
+			self.hvacActuator = HvacActuatorSimTask()
+			pass
 
 
 	def sendActuatorCommand(self, data: ActuatorData) -> bool:

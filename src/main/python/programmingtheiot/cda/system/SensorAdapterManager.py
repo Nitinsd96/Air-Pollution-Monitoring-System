@@ -41,35 +41,48 @@ class SensorAdapterManager(object):
 		
 		if(self.useEmulator == True):
 			logging.info("Emulators are being used")
+			humidityModule = __import__('programmingtheiot.cda.emulated.HumiditySensorEmulatorTask', fromlist = ['HumiditySensorEmulatorTask'])
+			heClazz = getattr(humidityModule, 'HumiditySensorEmulatorTask')
+			self.humidityEmulator = heClazz()
+			
+			pressureModule = __import__('programmingtheiot.cda.emulated.PressureSensorEmulatorTask', fromlist = ['PressureSensorEmulatorTask'])
+			heClazz = getattr(pressureModule, 'PressureSensorEmulatorTask')
+			self.pressureEmulator = heClazz()
+			
+			tempModule = __import__('programmingtheiot.cda.emulated.TemperatureSensorEmulatorTask', fromlist = ['TemperatureSensorEmulatorTask'])
+			heClazz = getattr(tempModule, 'TemperatureSensorEmulatorTask')
+			self.tempEmulator = heClazz()
+			
+			
 		else:
 			logging.info("Simulators are being used")
 			self.dataGenerator = SensorDataGenerator()
 			configUtil = ConfigUtil()
 			
-		humidity_floor = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.HUMIDITY_SIM_FLOOR_KEY, SensorDataGenerator.LOW_NORMAL_ENV_HUMIDITY)
-		humidity_ceiling = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.HUMIDITY_SIM_CEILING_KEY, SensorDataGenerator.HI_NORMAL_ENV_HUMIDITY)
-
-		pressure_Floor = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.PRESSURE_SIM_FLOOR_KEY, SensorDataGenerator.LOW_NORMAL_ENV_PRESSURE)
-		pressure_ceiling = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.PRESSURE_SIM_CEILING_KEY, SensorDataGenerator.HI_NORMAL_ENV_PRESSURE)
-
-		temp_floor = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.TEMP_SIM_FLOOR_KEY, SensorDataGenerator.LOW_NORMAL_INDOOR_TEMP)
-		temp_ceiling = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.TEMP_SIM_CEILING_KEY, SensorDataGenerator.HI_NORMAL_INDOOR_TEMP)
-
-
-		self.humidityData = self.dataGenerator.generateDailyEnvironmentHumidityDataSet(minValue = humidity_floor, maxValue = humidity_ceiling, useSeconds = False)
-
-		self.pressureData = self.dataGenerator.generateDailyEnvironmentPressureDataSet(minValue=pressure_Floor, maxValue = pressure_ceiling, useSeconds = False)
-
-		self.tempData =  self.dataGenerator.generateDailyIndoorTemperatureDataSet(minValue = temp_floor, maxValue = temp_ceiling, useSeconds = False)
-
-		self.humiditySensorSimTask = HumiditySensorSimTask(self.humidityData) 
-		self.pressureSensorSimTask = PressureSensorSimTask(self.pressureData)
-		self.temperatureSensorSimTask = TemperatureSensorSimTask(self.tempData)
-
-		logging.info("Simulated Humidity Sensor Sim Task Value is: %s ", self.humiditySensorSimTask.LatestSensorData)
-		logging.info("Simulated Pressure Sensor Sim Task Value is : %s ", self.pressureSensorSimTask.LatestSensorData)
-		logging.info("Simulated Temperature Sensor Sim Task Value is: %s ", self.temperatureSensorSimTask.LatestSensorData)
-		self.handleTelemetry()
+			humidity_floor = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.HUMIDITY_SIM_FLOOR_KEY, SensorDataGenerator.LOW_NORMAL_ENV_HUMIDITY)
+			humidity_ceiling = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.HUMIDITY_SIM_CEILING_KEY, SensorDataGenerator.HI_NORMAL_ENV_HUMIDITY)
+	
+			pressure_Floor = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.PRESSURE_SIM_FLOOR_KEY, SensorDataGenerator.LOW_NORMAL_ENV_PRESSURE)
+			pressure_ceiling = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.PRESSURE_SIM_CEILING_KEY, SensorDataGenerator.HI_NORMAL_ENV_PRESSURE)
+	
+			temp_floor = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.TEMP_SIM_FLOOR_KEY, SensorDataGenerator.LOW_NORMAL_INDOOR_TEMP)
+			temp_ceiling = configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.TEMP_SIM_CEILING_KEY, SensorDataGenerator.HI_NORMAL_INDOOR_TEMP)
+	
+	
+			self.humidityData = self.dataGenerator.generateDailyEnvironmentHumidityDataSet(minValue = humidity_floor, maxValue = humidity_ceiling, useSeconds = False)
+	
+			self.pressureData = self.dataGenerator.generateDailyEnvironmentPressureDataSet(minValue=pressure_Floor, maxValue = pressure_ceiling, useSeconds = False)
+	
+			self.tempData =  self.dataGenerator.generateDailyIndoorTemperatureDataSet(minValue = temp_floor, maxValue = temp_ceiling, useSeconds = False)
+	
+			self.humiditySensorSimTask = HumiditySensorSimTask(self.humidityData) 
+			self.pressureSensorSimTask = PressureSensorSimTask(self.pressureData)
+			self.temperatureSensorSimTask = TemperatureSensorSimTask(self.tempData)
+	
+			logging.info("Simulated Humidity Sensor Sim Task Value is: %s ", self.humiditySensorSimTask.LatestSensorData)
+			logging.info("Simulated Pressure Sensor Sim Task Value is : %s ", self.pressureSensorSimTask.LatestSensorData)
+			logging.info("Simulated Temperature Sensor Sim Task Value is: %s ", self.temperatureSensorSimTask.LatestSensorData)
+			self.handleTelemetry()
 		pass	
 
 
@@ -78,12 +91,19 @@ class SensorAdapterManager(object):
 	def handleTelemetry(self):
 		if(self.useEmulator == False):
 			self.humiditySensorSimTask.generateTelemetry()
-		logging.info("Simulated Humidity Sensor value is %s ",self.humiditySensorSimTask.getTelemetryValue())
-		self.pressureSensorSimTask.generateTelemetry()
-		logging.info("Simulated Pressure Sensor value is %s ",self.pressureSensorSimTask.getTelemetryValue())
-		self.temperatureSensorSimTask.generateTelemetry()
-		logging.info("Simulated Temperature Sensor value is %s ",self.temperatureSensorSimTask.getTelemetryValue())
-		pass
+			logging.info("Simulated Humidity Sensor value is %s ",self.humiditySensorSimTask.getTelemetryValue())
+			self.pressureSensorSimTask.generateTelemetry()
+			logging.info("Simulated Pressure Sensor value is %s ",self.pressureSensorSimTask.getTelemetryValue())
+			self.temperatureSensorSimTask.generateTelemetry()
+			logging.info("Simulated Temperature Sensor value is %s ",self.temperatureSensorSimTask.getTelemetryValue())
+		else:
+			self.humiditySensorEmulatorTask.generateTelemetry()
+			logging.info("Emulated Humidity Sensor value is %s ",self.humiditySensorEmulatorTask.getTelemetryValue())
+			self.pressureSensorEmulatorTask.generateTelemetry()
+			logging.info("Emulated Pressure Sensor value is %s ",self.pressureSensorEmulatorTask.getTelemetryValue())
+			self.temperatureSensorEmulatorTask.generateTelemetry()
+			logging.info("Emulated Temperature Sensor value is %s ",self.temperatureSensorEmulatorTask.getTelemetryValue())
+				
 
 
 		
