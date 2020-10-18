@@ -209,6 +209,8 @@ class ConfigUtil(metaclass = Singleton):
 		@param forceReload Defaults to false; if true, will reload the config.
 		@return The entire configuration file.
 		"""
+		
+		
 		if (self.isLoaded == False or forceReload):
 			self._loadConfig()
 		

@@ -23,8 +23,8 @@ class SensorData(BaseIotData):
 	PRESSURE_SENSOR_TYPE = 2
 	TEMP_SENSOR_TYPE = 3
 	
-	newVal = DEFAULT_VAL
 	
+
 	def __init__(self, sensorType = DEFAULT_SENSOR_TYPE, d = None):
 		super(SensorData, self).__init__(d = d)
 		"i added"
@@ -41,12 +41,11 @@ class SensorData(BaseIotData):
 	def getValue(self) -> float:
 		
 		"i added"
-		return self.newVal
+		return self.sensorValue
 		
 	
 	def setValue(self, newVal: float):
-		self.newVal = newVal
+		self.sensorValue = newVal
 	
 	def _handleUpdateData(self, data):
-		self.newVal = data.getValue()
-		
+		pass

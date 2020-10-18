@@ -60,7 +60,7 @@ class ActuatorData(BaseIotData):
 	
 	def setValue(self, val: float):
 		self.val = val
-		"pass"
+
 		
 	def _handleUpdateData(self, data):
 		self.command = data.getCommand()

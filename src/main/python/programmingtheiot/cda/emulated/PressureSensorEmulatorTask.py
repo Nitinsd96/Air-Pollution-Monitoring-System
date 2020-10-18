@@ -21,21 +21,26 @@ class PressureSensorEmulatorTask(BaseSensorSimTask):
 	"""
 	Shell representation of class for student implementation.
 	
+	
+	Handling HumiditySensor Emulation
+	Invoking SenseHAT
+	Sensing/Storing Data from SenseHat Emulator
+	
+	
 	"""
-
+	enableEmulation = None
 	def __init__(self, dataSet = None):
-		super().__init__(SensorData.PRESSURE_SENSOR_TYPE, minVal = SensorDataGenerator.LOW_NORMAL_ENV_PRESSURE, maxVal = SensorDataGenerator.HI_NORMAL_ENV_PRESSURE)
-		#obj = SenseHAT()
-		self.emulate_flag = False
-		if ConfigConst.ENABLE_SENSE_HAT_KEY == False:
-			self.emulate_flag = True 
-		enableEmulation = ConfigUtil._getConfig()	
-		self.sh = SenseHAT(emulate = enableEmulation)
+		super(PressureSensorEmulatorTask, self).__init__(SensorData.PRESSURE_SENSOR_TYPE, minVal = SensorDataGenerator.LOW_NORMAL_ENV_PRESSURE, maxVal = SensorDataGenerator.HI_NORMAL_ENV_PRESSURE)
+		if(ConfigConst.ENABLE_SENSE_HAT_KEY == True):
+			self.enableEmulation = True
+		elif(ConfigConst.ENABLE_SENSE_HAT_KEY == False):
+			self.enableEmulation = False
+		self.sh = SenseHAT(emulate = self.enableEmulation)
 	
 	def generateTelemetry(self) -> SensorData:
-		sensorData = SensorData(sensorType = self.sensorType)
+		sensorData = SensorData(sensorType = 2)
 		sensorVal = self.sh.environ.pressure		
 		sensorData.setValue(sensorVal)
-		self.latestSensorData = sensorData
+		self.LatestSensorData = sensorData
 
-		return sensorData
+		return self.LatestSensorData

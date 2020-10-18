@@ -27,6 +27,13 @@ class SensorAdapterManager(object):
 	"""
 	Shell representation of class for student implementation.
 	
+
+	Handling All Sensors - invoking respective classes depending on input : Simulator or Emulator
+	
+	Sending respective commands to store Data/Values either from Simulator or Emulator
+	
+	
+	
 	"""
 
 	def __init__(self, useEmulator: bool = False, pollRate: int = 5, allowConfigOverride: bool = True):
@@ -96,14 +103,14 @@ class SensorAdapterManager(object):
 			logging.info("Simulated Pressure Sensor value is %s ",self.pressureSensorSimTask.getTelemetryValue())
 			self.temperatureSensorSimTask.generateTelemetry()
 			logging.info("Simulated Temperature Sensor value is %s ",self.temperatureSensorSimTask.getTelemetryValue())
-		else:
-			self.humiditySensorEmulatorTask.generateTelemetry()
-			logging.info("Emulated Humidity Sensor value is %s ",self.humiditySensorEmulatorTask.getTelemetryValue())
-			self.pressureSensorEmulatorTask.generateTelemetry()
-			logging.info("Emulated Pressure Sensor value is %s ",self.pressureSensorEmulatorTask.getTelemetryValue())
-			self.temperatureSensorEmulatorTask.generateTelemetry()
-			logging.info("Emulated Temperature Sensor value is %s ",self.temperatureSensorEmulatorTask.getTelemetryValue())
-				
+		elif(self.useEmulator == True):
+			self.humidityEmulator.generateTelemetry()
+			logging.info("Emulated Humidity Sensor value is %s ",self.humidityEmulator.getTelemetryValue())
+			self.pressureEmulator.generateTelemetry()
+			logging.info("Emulated Pressure Sensor value is %s ",self.pressureEmulator.getTelemetryValue())
+			self.tempEmulator.generateTelemetry()
+			logging.info("Emulated Temperature Sensor value is %s ",self.tempEmulator.getTelemetryValue())
+		pass	
 
 
 		

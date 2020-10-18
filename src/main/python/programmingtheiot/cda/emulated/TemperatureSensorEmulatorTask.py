@@ -21,20 +21,23 @@ class TemperatureSensorEmulatorTask(BaseSensorSimTask):
 	"""
 	Shell representation of class for student implementation.
 	
+	Handling HumiditySensor Emulation
+	Invoking SenseHAT
+	Sensing/Storing Data from SenseHat Emulator
+	
 	"""
-
+	enableEmulation = None
 	def __init__(self, dataSet = None):
-		super().__init__(SensorData.TEMP_SENSOR_TYPE, minVal = SensorDataGenerator.LOW_NORMAL_INDOOR_TEMP, maxVal = SensorDataGenerator.HI_NORMAL_INDOOR_TEMP)
-		#obj = SenseHAT()
-		self.emulate_flag = False
-		if ConfigConst.ENABLE_SENSE_HAT_KEY == False:
-			self.emulate_flag = True
-		enableEmulation = ConfigUtil._getConfig() 
-		self.sh = SenseHAT(emulate = enableEmulation)
+		super(TemperatureSensorEmulatorTask, self).__init__(SensorData.TEMP_SENSOR_TYPE, minVal = SensorDataGenerator.LOW_NORMAL_INDOOR_TEMP, maxVal = SensorDataGenerator.HI_NORMAL_INDOOR_TEMP)
+		if(ConfigConst.ENABLE_SENSE_HAT_KEY == True):
+			self.enableEmulation = True
+		elif(ConfigConst.ENABLE_SENSE_HAT_KEY == False):
+			self.enableEmulation = False
+		self.sh = SenseHAT(emulate = self.enableEmulation)
 	
 	def generateTelemetry(self) -> SensorData:
-		sensorData = SensorData(sensorType = self.sensorType)
+		sensorData = SensorData(sensorType = 3)
 		sensorVal = self.sh.environ.temperature		
 		sensorData.setValue(sensorVal)
-		self.latestSensorData = sensorData
-		return sensorData
+		self.LatestSensorData = sensorData
+		return self.LatestSensorData

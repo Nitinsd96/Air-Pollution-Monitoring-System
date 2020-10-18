@@ -25,7 +25,9 @@ class BaseIotData(object):
 	DEFAULT_STATUS = 0
 	STATUS_IDLE = DEFAULT_STATUS
 	STATUS_ACTIVE = 1
-
+	
+	sensorValue = 0
+	
 	def __init__(self, d = None):
 		"""
 		Constructor.

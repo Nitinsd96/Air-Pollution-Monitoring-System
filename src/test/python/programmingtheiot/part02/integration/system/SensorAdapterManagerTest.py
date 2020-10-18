@@ -30,7 +30,7 @@ class SensorAdapterManagerTest(unittest.TestCase):
 		logging.info("Testing SensorAdapterManager class...")
 		
 		self.defaultMsgListener = DefaultDataMessageListener()
-		self.sensorAdapterMgr = SensorAdapterManager()
+		self.sensorAdapterMgr = SensorAdapterManager(useEmulator=True)
 		self.sensorAdapterMgr.setDataMessageListener(self.defaultMsgListener)
 		
 	def setUp(self):

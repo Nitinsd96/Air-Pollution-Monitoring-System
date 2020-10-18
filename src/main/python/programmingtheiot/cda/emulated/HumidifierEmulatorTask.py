@@ -24,22 +24,24 @@ class HumidifierEmulatorTask(BaseActuatorSimTask):
 	Shell representation of class for student implementation.
 	
 	"""
-
+	enableEmulation = None
 	def __init__(self):
 		super(HumidifierEmulatorTask, self).__init__(actuatorType = ActuatorData.HUMIDIFIER_ACTUATOR_TYPE, simpleName = "HUMIDIFIER")
-		#obj = SenseHAT()
-		self.emulate_flag = False
-		if ConfigConst.ENABLE_SENSE_HAT_KEY == False:
-			self.emulate_flag = True 
-		#doubt
-		enableEmulation = ConfigUtil._getConfig()
-		self.sh = SenseHAT(emulate = enableEmulation)
+		if(ConfigConst.ENABLE_SENSE_HAT_KEY == True):
+			self.enableEmulation = True
+		elif(ConfigConst.ENABLE_SENSE_HAT_KEY == False):
+			self.enableEmulation = False
+		self.sh = SenseHAT(emulate = self.enableEmulation)
+
+
 
 	def _handleActuation(self, cmd: int, val: float = 0.0, stateData: str = None) -> int:
 		if cmd == ActuatorData.COMMAND_ON:
 			if self.sh.screen:
 			# create a message with the value and an 'ON' message, then scroll it across the LED display
-				logging.info("value %f and ON",ActuatorData.val)
+				Text_to_display = " Device ON & value {}".format(val)
+				self.sh.screen.scroll_text(Text_to_display)
+				
 				# meaning of scrolling it to LED display
 			else:
 				logging.warning("No SenseHAT LED screen instance to update.")
@@ -47,7 +49,9 @@ class HumidifierEmulatorTask(BaseActuatorSimTask):
 		else:
 			if self.sh.screen:
 			# create a message with an 'OFF' message, then scroll it across the LED display
-				logging.info("Off")
+				Text_to_display = " Device OFF"
+				self.sh.screen.scroll_text(Text_to_display)
 			else:
 				logging.warning("No SenseHAT LED screen instance to clear / close.")
 				return -1
+			

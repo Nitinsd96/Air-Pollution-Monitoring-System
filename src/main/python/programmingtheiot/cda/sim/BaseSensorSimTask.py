@@ -22,38 +22,42 @@ class BaseSensorSimTask():
 	DEFAULT_MAX_VAL = 1000.0
 	
 	def __init__(self, sensorType: int = SensorData.DEFAULT_SENSOR_TYPE, dataSet = None, minVal: float = DEFAULT_MIN_VAL, maxVal: float = DEFAULT_MAX_VAL):
-		self.dataSet = dataSet
-		self.sensorType = sensorType
-		self.minVal = minVal
-		self.maxVal = maxVal
+		   						
+		self.LatestSensorData = SensorData() 
+		self.LatestSensorData.minVal = minVal
+		self.LatestSensorData.maxVal = maxVal
+		self.LatestSensorData.dataSet = dataSet
+		self.LatestSensorData.sensorType = sensorType
 		
-		self.currentDataSetIndex = 0      						
-		self.LatestSensorData = SensorData(sensorType)   
-		self.useRandomizer = False    
-		if self.dataSet == None :
-			self.useRandomizer = True
+		self.LatestSensorData.currentDataSetIndex = 0   
+		  
+		self.LatestSensorData.useRandomizer = False    
+		if dataSet == None :
+			self.LatestSensorData.useRandomizer = True
 			
 	
 	def generateTelemetry(self) -> SensorData:
-		sensorData = SensorData(sensorType = self.sensorType)    
-		newValue = 0
-		sensorData.DEFAULT_SENSOR_TYPE = self.sensorType
+# 		sensorData = SensorData(sensorType = self.sensorType)    
+# 		newValue = 0
+# 		sensorData.DEFAULT_SENSOR_TYPE = self.sensorType
+# 		
+# 		if self.useRandomizer == True :
+# 			newValue = random.randint(self.minVal,self.maxVal)         
+# 		else:
+# 			newValue = self.dataSet.getDataEntry(self.currentDataSetIndex)
+# 			if self.currentDataSetIndex == self.dataSet.getDataEntryCount():
+# 				self.currentDataSetIndex = 0
+# 			else:
+# 				self.currentDataSetIndex = self.currentDataSetIndex+1
+# 				
+# 		sensorData.setValue(newValue)		
+# 		self.LatestSensorData = sensorData
 		
-		if self.useRandomizer == True :
-			newValue = random.randint(self.minVal,self.maxVal)         
-		else:
-			newValue = self.dataSet.getDataEntry(self.currentDataSetIndex)
-			if self.currentDataSetIndex == self.dataSet.getDataEntryCount():
-				self.currentDataSetIndex = 0
-			else:
-				self.currentDataSetIndex = self.currentDataSetIndex+1
-				
-		sensorData.setValue(newValue)		
-		self.LatestSensorData = sensorData
-		return sensorData   
+		self.LatestSensorData.setValue(random.randint(self.LatestSensorData.minVal,self.LatestSensorData.maxVal))
+		return self.LatestSensorData
 	
 	def getTelemetryValue(self) -> float:
-		if self.LatestSensorData :
+		if self.LatestSensorData != None:
 			return self.LatestSensorData.getValue()
 		else :
 			self.LatestSensorData = self.generateTelemetry()

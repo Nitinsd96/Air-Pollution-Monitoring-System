@@ -21,19 +21,30 @@ class LedDisplayEmulatorTask(BaseActuatorSimTask):
 	"""
 	Shell representation of class for student implementation.
 	
+	Handling LEDDISPLAY Emulation
+	Invoking SenseHAT
+	Here Actuation is to Display Value on LED
+	
 	"""
-
+	enableEmulation = None
 	def __init__(self):
 		super(LedDisplayEmulatorTask, self).__init__(actuatorType = ActuatorData.LED_DISPLAY_ACTUATOR_TYPE, simpleName = "LED_Display")
-		#obj = SenseHAT()
-		self.emulate_flag = False
-		if ConfigConst.ENABLE_SENSE_HAT_KEY == False:
-			self.emulate_flag = True 
-		#doubt
-		enableEmulation = ConfigUtil._getConfig()
-		self.sh = SenseHAT(emulate = enableEmulation)
+		self.enableEmulation = False
+		if ConfigConst.ENABLE_SENSE_HAT_KEY == True:
+			self.enableEmulation = True 
+		self.sh = SenseHAT(emulate = self.enableEmulation)
 
 	def _handleActuation(self, cmd: int, val: float = 0.0, stateData: str = None) -> int:
 		#if the command is 'ON', scroll the state data across the screen. If the command is 'OFF', clear the LED display.
-		
+		if cmd == 1:
+			#scroll data on screen
+			Text_to_Display = "Displaying DATA"
+			self.sh.screen.scroll_text(Text_to_Display)
+			self.sh.screen.scroll_text(stateData)
+			
+		else:
+			#clear LED display
+			Text_to_Display = "Clearing Data"
+			self.sh.screen.scroll_text(Text_to_Display)
+			self.sh.screen.clear()
 		

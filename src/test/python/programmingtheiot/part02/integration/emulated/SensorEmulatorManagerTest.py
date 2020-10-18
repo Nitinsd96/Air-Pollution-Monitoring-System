@@ -12,6 +12,7 @@ import unittest
 
 from time import sleep
 
+
 from programmingtheiot.cda.system.SensorAdapterManager import SensorAdapterManager
 from programmingtheiot.common.DefaultDataMessageListener import DefaultDataMessageListener
 

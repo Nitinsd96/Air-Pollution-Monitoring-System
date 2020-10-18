@@ -23,23 +23,26 @@ class HvacEmulatorTask(BaseActuatorSimTask):
 	"""
 	Shell representation of class for student implementation.
 	
+	Shell representation of class for student implementation.
+	Handling Hvac Emulation
+	Invoking SenseHAT
+	Here Actuation is to Display Value on LED
+	
 	"""
-
+	enableEmulation = None
 	def __init__(self):
 		super(HvacEmulatorTask, self).__init__(actuatorType = ActuatorData.HVAC_ACTUATOR_TYPE, simpleName = "HVAC")
-		#obj = SenseHAT()
-		self.emulate_flag = False
-		if ConfigConst.ENABLE_SENSE_HAT_KEY == False:
-			self.emulate_flag = True 
-		#doubt
-		enableEmulation = ConfigUtil._getConfig()
+		enableEmulation = False
+		if ConfigConst.ENABLE_SENSE_HAT_KEY == True:
+			enableEmulation = True 
 		self.sh = SenseHAT(emulate = enableEmulation)
 
 	def _handleActuation(self, cmd: int, val: float = 0.0, stateData: str = None) -> int:
 		if cmd == ActuatorData.COMMAND_ON:
 			if self.sh.screen:
 			# create a message with the value and an 'ON' message, then scroll it across the LED display
-				logging.info("value %f and ON",ActuatorData.val)
+				Text_to_display = " Device ON & value {}".format(val)
+				self.sh.screen.scroll_text(Text_to_display)
 				
 				# meaning of scrolling it to LED display
 			else:
@@ -48,7 +51,8 @@ class HvacEmulatorTask(BaseActuatorSimTask):
 		else:
 			if self.sh.screen:
 			# create a message with an 'OFF' message, then scroll it across the LED display
-				logging.info("Off")
+				Text_to_display = " Device OFF"
+				self.sh.screen.scroll_text(Text_to_display)
 			else:
 				logging.warning("No SenseHAT LED screen instance to clear / close.")
 				return -1

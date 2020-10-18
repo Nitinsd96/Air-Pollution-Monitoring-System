@@ -9,14 +9,19 @@ Be sure to implement all the PIOT-CDA-* issues (requirements) listed at [PIOT-IN
 NOTE: Include two full paragraphs describing your implementation approach by answering the questions listed below.
 
 What does your implementation do? 
+-This implementation integrates CDA functionality with SenseHAT emulator. This jappends by making sense-emu emulator talk to CDA app using pisense
 
 How does your implementation work?
+- By configuring SenseHAT emulator
+- By creating sensor and actuator modules
+- By creating tasks for SenseHAT Humidity, Pressure and Temperature sensors
+- By adding emulator functionality to SensorAdapterManager and ActuatorAdapterManager
 
 ### Code Repository and Branch
 
 NOTE: Be sure to include the branch (e.g. https://github.com/programming-the-iot/python-components/tree/alpha001).
 
-URL: 
+URL: https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-Nitinsd96/tree/chapter04
 
 ### UML Design Diagram(s)
 
@@ -25,15 +30,19 @@ diagram you provide will look similar to, but not the same as, its counterpart i
 book [Programming the IoT](https://learning.oreilly.com/library/view/programming-the-internet/9781492081401/).
 
 
+![UML Diagram](Capture1.JPG "UML")
+
 ### Unit Tests Executed
 
 NOTE: TA's will execute your unit tests. You only need to list each test case below
 (e.g. ConfigUtilTest, DataUtilTest, etc). Be sure to include all previous tests, too,
 since you need to ensure you haven't introduced regressions.
 
-- 
-- 
-- 
+- HumidifierActuatorSimTask 
+- HumiditySensorSimTask
+- HvacActuatorSimTask
+- PressureSensorSimTask
+- TemperatureSensorSimTask
 
 ### Integration Tests Executed
 
@@ -42,8 +51,9 @@ some exceptions (such as your cloud connectivity tests). In such cases, they'll 
 your code to ensure it's correct. As for the tests you execute, you only need to list each
 test case below (e.g. SensorSimAdapterManagerTest, DeviceDataManagerTest, etc.)
 
-- 
-- 
-- 
+- SenseHatEmulatorQuickTest
+- SensorEmulatorManagerTest
+- ActuatorEmulatorManagerTest
+- ActuatorAdapterManagerTest
 
 EOF.

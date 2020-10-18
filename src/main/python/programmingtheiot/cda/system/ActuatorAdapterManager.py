@@ -29,18 +29,18 @@ class ActuatorAdapterManager(object):
 	def __init__(self, useEmulator: bool = False):
 		self.useEmulator = useEmulator
 		if(self.useEmulator == True):
-			logging("Emulators will be used")
+			logging.info("Emulators will be used")
 			
 			humidifierModule = __import__('programmingtheiot.cda.emulated.HumidifierEmulatorTask', fromlist = ['HumidifierEmulatorTask'])
 			hueClazz = getattr(humidifierModule, 'HumidifierEmulatorTask')
 			self.humidifierEmulator = hueClazz()
 			
-			hvacModule = __import__('programmingtheiot.cda.emulated.hvacEmulatorTask', fromlist = ['HvacEmulatorTask'])
+			hvacModule = __import__('programmingtheiot.cda.emulated.HvacEmulatorTask', fromlist = ['HvacEmulatorTask'])
 			hueClazz = getattr(hvacModule, 'HvacEmulatorTask')
 			self.hvacEmulator = hueClazz()
 			
-			LedDisplayModule = __import__('programmingtheiot.cda.emulated.LedDisplayEmulatorTask', fromlist = ['LedDIsplayEmulatorTask'])
-			hueClazz = getattr(LedDisplayModule, 'LedEmulatorTask')
+			LedDisplayModule = __import__('programmingtheiot.cda.emulated.LedDisplayEmulatorTask', fromlist = ['LedDisplayEmulatorTask'])
+			hueClazz = getattr(LedDisplayModule, 'LedDisplayEmulatorTask')
 			self.LedDisplayEmulator = hueClazz()
 			
 		else:
@@ -59,22 +59,42 @@ class ActuatorAdapterManager(object):
 				if(data.getCommand()==0):
 					logging.info("Emulating HUMIDIFIER actuator OFF:")
 					logging.info("---------------------------------------")
+					return False
 				else:
 					logging.info("Emulating HUMIDIFIER actuator ON:")
-					logging.info(" Humidifier value : %s", data.val) 
+					logging.info(" Humidifier value : %s", data.getValue())       
+					return True
 			elif (data.type == data.HVAC_ACTUATOR_TYPE):
 				if(data.getCommand()==0):
 					logging.info("Emulating HVAC actuator OFF:")
 					logging.info("---------------------------------------")
-			else:
-				logging.info("Emulating HVAC actuator ON:")
-				logging.info(" HVAC value : %s", data.actuatorValue)
-			return True
-		else:
-			return False
-
-		pass
-	
+					return False
+				else:
+					logging.info("Emulating HVAC actuator ON:")
+					logging.info(" HVAC value : %s", data.getValue())
+					return True
+		elif(self.useEmulator == True):
+			if(data.type == data.HUMIDIFIER_ACTUATOR_TYPE):
+				if(data.getCommand()==0):
+					logging.info("Emulating HUMIDIFIER actuator OFF:")
+					logging.info("---------------------------------------")
+					return False
+				else:
+					logging.info("Emulating HUMIDIFIER actuator ON:")
+					logging.info(" Humidifier value : %s",data.getValue())
+					self.humidifierEmulator._handleActuation(data.getCommand(), data.getValue())
+					return True
+			elif (data.type == data.HVAC_ACTUATOR_TYPE):
+				if(data.getCommand()==0):
+					logging.info("Emulating HVAC actuator OFF:")
+					logging.info("---------------------------------------")
+					return False
+				else:
+					logging.info("Emulating HVAC actuator ON:")
+					logging.info(" HVAC value : %s",data.getValue())
+					self.hvacEmulator._handleActuation(data.getCommand(), data.getValue())
+					return True           
+			
 	def setDataMessageListener(self, listener: IDataMessageListener) -> bool:
 		if( listener != None):
 			self.dataMsgListener = listener 
