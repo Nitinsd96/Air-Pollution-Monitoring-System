@@ -21,6 +21,12 @@ class ActuatorAdapterManager(object):
 	"""
 	Shell representation of class for student implementation.
 	
+	
+	Handling All Actuators - invoking respective classes depending on input : Simulator or Emulator
+	
+	Sending respective commands to do actuation from either of three devices via appropriate method - Simulator or Emulator
+	
+	
 	"""
 	useEmulator = None
 	dataMsgListener = None 
@@ -51,6 +57,7 @@ class ActuatorAdapterManager(object):
 			self.hvacActuator = HvacActuatorSimTask()
 			pass
 
+		"""Getting Actuator value from Simulator/Emulator as per self.useEmulator flag"""
 
 	def sendActuatorCommand(self, data: ActuatorData) -> bool:
 		logging.info("Actuator command received. Processing...")

@@ -22,8 +22,11 @@ from pisense import SenseHAT
 class HumidifierEmulatorTask(BaseActuatorSimTask):
 	"""
 	Shell representation of class for student implementation.
-	
+	Handling Humidifier Emulation
+	Invoking SenseHAT
+	Here Actuation is to Display Value on LED
 	"""
+	
 	enableEmulation = None
 	def __init__(self):
 		super(HumidifierEmulatorTask, self).__init__(actuatorType = ActuatorData.HUMIDIFIER_ACTUATOR_TYPE, simpleName = "HUMIDIFIER")
@@ -34,7 +37,9 @@ class HumidifierEmulatorTask(BaseActuatorSimTask):
 		self.sh = SenseHAT(emulate = self.enableEmulation)
 
 
-
+	""" Actuation is done by showing output on LED
+		Used SenseHAT inbuilt library and methods to display String on LED	
+	"""
 	def _handleActuation(self, cmd: int, val: float = 0.0, stateData: str = None) -> int:
 		if cmd == ActuatorData.COMMAND_ON:
 			if self.sh.screen:

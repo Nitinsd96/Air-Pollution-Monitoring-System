@@ -35,6 +35,8 @@ class TemperatureSensorEmulatorTask(BaseSensorSimTask):
 			self.enableEmulation = False
 		self.sh = SenseHAT(emulate = self.enableEmulation)
 	
+	
+	"""Returning Object with latest value for humidity"""
 	def generateTelemetry(self) -> SensorData:
 		sensorData = SensorData(sensorType = 3)
 		sensorVal = self.sh.environ.temperature		

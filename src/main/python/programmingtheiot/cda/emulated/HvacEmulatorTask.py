@@ -37,6 +37,10 @@ class HvacEmulatorTask(BaseActuatorSimTask):
 			enableEmulation = True 
 		self.sh = SenseHAT(emulate = enableEmulation)
 
+
+	""" Actuation is done by showing output on LED
+		Used SenseHAT inbuilt library and methods to display String on LED	
+	"""
 	def _handleActuation(self, cmd: int, val: float = 0.0, stateData: str = None) -> int:
 		if cmd == ActuatorData.COMMAND_ON:
 			if self.sh.screen:

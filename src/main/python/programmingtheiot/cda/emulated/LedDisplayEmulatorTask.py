@@ -29,14 +29,21 @@ class LedDisplayEmulatorTask(BaseActuatorSimTask):
 	enableEmulation = None
 	def __init__(self):
 		super(LedDisplayEmulatorTask, self).__init__(actuatorType = ActuatorData.LED_DISPLAY_ACTUATOR_TYPE, simpleName = "LED_Display")
-		self.enableEmulation = False
-		if ConfigConst.ENABLE_SENSE_HAT_KEY == True:
-			self.enableEmulation = True 
+		if(ConfigConst.ENABLE_SENSE_HAT_KEY == True):
+			self.enableEmulation = True
+		elif(ConfigConst.ENABLE_SENSE_HAT_KEY == False):
+			self.enableEmulation = False
 		self.sh = SenseHAT(emulate = self.enableEmulation)
 
+
+
+	""" Actuation is done by showing output on LED
+		Used SenseHAT inbuilt library and methods to display String on LED	
+	"""
 	def _handleActuation(self, cmd: int, val: float = 0.0, stateData: str = None) -> int:
 		#if the command is 'ON', scroll the state data across the screen. If the command is 'OFF', clear the LED display.
-		if cmd == 1:
+		print("jsfvbjd")
+		if cmd == ActuatorData.COMMAND_ON:
 			#scroll data on screen
 			Text_to_Display = "Displaying DATA"
 			self.sh.screen.scroll_text(Text_to_Display)

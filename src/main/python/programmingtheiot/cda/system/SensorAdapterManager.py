@@ -94,7 +94,10 @@ class SensorAdapterManager(object):
 
 
 		
-		
+	"""
+	Displaying sensor values on console by calling Simulator/Emulator methods as per useEmulator flag
+	"""
+	
 	def handleTelemetry(self):
 		if(self.useEmulator == False):
 			self.humiditySensorSimTask.generateTelemetry()

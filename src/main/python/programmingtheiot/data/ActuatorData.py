@@ -27,7 +27,7 @@ class ActuatorData(BaseIotData):
 	LED_DISPLAY_ACTUATOR_TYPE = 100
 	
 	
-	command = DEFAULT_COMMAND
+	command = None
 	
 	def __init__(self, actuatorType = DEFAULT_ACTUATOR_TYPE, d = None):
 		self.type = actuatorType

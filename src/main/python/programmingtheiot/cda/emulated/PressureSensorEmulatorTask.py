@@ -37,6 +37,8 @@ class PressureSensorEmulatorTask(BaseSensorSimTask):
 			self.enableEmulation = False
 		self.sh = SenseHAT(emulate = self.enableEmulation)
 	
+	
+	"""Returning Object with latest value for humidity"""
 	def generateTelemetry(self) -> SensorData:
 		sensorData = SensorData(sensorType = 2)
 		sensorVal = self.sh.environ.pressure		
