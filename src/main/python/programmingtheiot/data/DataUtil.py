@@ -6,7 +6,7 @@
 # implementation for the Programming the Internet of Things exercises,
 # and designed to be modified by the student as needed.
 #
-
+import json
 from json import JSONEncoder
 
 from programmingtheiot.data.ActuatorData import ActuatorData
@@ -18,27 +18,61 @@ class DataUtil():
 	Shell representation of class for student implementation.
 	
 	"""
-
+	
+	
 	def __init__(self, encodeToUtf8 = False):
 		pass
 	
 	def actuatorDataToJson(self, actuatorData):
-		pass
+		jsonData = json.dumps(actuatorData, indent = 4, cls = JsonDataEncoder, ensure_ascii = True)
+		return jsonData
+	
 	
 	def sensorDataToJson(self, sensorData):
-		pass
+		jsonData = json.dumps(sensorData, indent = 4, cls = JsonDataEncoder, ensure_ascii = True)
+		return jsonData
+
 
 	def systemPerformanceDataToJson(self, sysPerfData):
-		pass
+		jsonData = json.dumps(sysPerfData, indent = 4, cls = JsonDataEncoder, ensure_ascii = True)
+		return jsonData
+
 	
 	def jsonToActuatorData(self, jsonData):
-		pass
+		jsonData = jsonData.replace("\'", "\"").replace('False','false').replace('True', 'true')
+		adDict = json.loads(jsonData)
+		ad = ActuatorData()
+		mvDict = vars(ad)
+
+		for key in adDict:
+			if key in mvDict:
+				setattr(ad, key, adDict[key])
+		return ad
 	
 	def jsonToSensorData(self, jsonData):
-		pass
+		jsonData = jsonData.replace("\'", "\"").replace('False','false').replace('True', 'true')
+		adDict = json.loads(jsonData)
+		ad = SensorData()
+		mvDict = vars(ad)
+
+		for key in adDict:
+			if key in mvDict:
+				setattr(ad, key, adDict[key])
+		return ad
+
+		
 	
 	def jsonToSystemPerformanceData(self, jsonData):
-		pass
+		jsonData = jsonData.replace("\'", "\"").replace('False','false').replace('True', 'true')
+		adDict = json.loads(jsonData)
+		ad = SystemPerformanceData()
+		mvDict = vars(ad)
+
+		for key in adDict:
+			if key in mvDict:
+				setattr(ad, key, adDict[key])
+		return ad
+
 	
 class JsonDataEncoder(JSONEncoder):
 	"""

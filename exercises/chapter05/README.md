@@ -9,8 +9,10 @@ Be sure to implement all the PIOT-CDA-* issues (requirements) listed at [PIOT-IN
 NOTE: Include two full paragraphs describing your implementation approach by answering the questions listed below.
 
 What does your implementation do? 
+this implementation builds data management and transformation capabilities into  GDA and CDA by building a converter to serialize and de-serialize your data wrappers to / from JSON.
 
 How does your implementation work?
+By Adding JSON-based object conversation functionality for  sensor and actuator data in both the GDA (Java) and and CDA (Python).
 
 ### Code Repository and Branch
 
@@ -24,6 +26,7 @@ NOTE: Include one or more UML designs representing your solution. It's expected 
 diagram you provide will look similar to, but not the same as, its counterpart in the
 book [Programming the IoT](https://learning.oreilly.com/library/view/programming-the-internet/9781492081401/).
 
+![UML Diagram](Capture.JPG "UML")
 
 ### Unit Tests Executed
 
@@ -31,9 +34,15 @@ NOTE: TA's will execute your unit tests. You only need to list each test case be
 (e.g. ConfigUtilTest, DataUtilTest, etc). Be sure to include all previous tests, too,
 since you need to ensure you haven't introduced regressions.
 
-- 
-- 
-- 
+
+- ActuatorDataTest
+- SensorDataTest
+- SystemPerformanceDataTest
+- SystemStateDataTest 
+- SystemCpuUtilTaskTest
+- SystemMemUtilTaskTest
+- DataUtilTest
+- DataIntegrationTest
 
 ### Integration Tests Executed
 
@@ -42,8 +51,8 @@ some exceptions (such as your cloud connectivity tests). In such cases, they'll 
 your code to ensure it's correct. As for the tests you execute, you only need to list each
 test case below (e.g. SensorSimAdapterManagerTest, DeviceDataManagerTest, etc.)
 
-- 
-- 
+- DataIntegrationTest
+- DeviceDataManagerNoCommsTest
 - 
 
 EOF.
