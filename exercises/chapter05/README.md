@@ -18,7 +18,7 @@ By Adding JSON-based object conversation functionality for  sensor and actuator 
 
 NOTE: Be sure to include the branch (e.g. https://github.com/programming-the-iot/python-components/tree/alpha001).
 
-URL: 
+URL: https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-Nitinsd96/tree/chapter05
 
 ### UML Design Diagram(s)
 
