@@ -23,21 +23,22 @@ class DataUtil():
 	def __init__(self, encodeToUtf8 = False):
 		pass
 	
+	"""return jsonData, after conversion from actuatorData"""
 	def actuatorDataToJson(self, actuatorData):
 		jsonData = json.dumps(actuatorData, indent = 4, cls = JsonDataEncoder, ensure_ascii = True)
 		return jsonData
 	
-	
+	"""return jsonData, after conversion from SensorData"""
 	def sensorDataToJson(self, sensorData):
 		jsonData = json.dumps(sensorData, indent = 4, cls = JsonDataEncoder, ensure_ascii = True)
 		return jsonData
 
-
+	"""return jsonData, after conversion from sysPerfData"""
 	def systemPerformanceDataToJson(self, sysPerfData):
 		jsonData = json.dumps(sysPerfData, indent = 4, cls = JsonDataEncoder, ensure_ascii = True)
 		return jsonData
 
-	
+	"""return actuatorData, after conversion from jsonData"""	
 	def jsonToActuatorData(self, jsonData):
 		jsonData = jsonData.replace("\'", "\"").replace('False','false').replace('True', 'true')
 		adDict = json.loads(jsonData)
@@ -49,6 +50,7 @@ class DataUtil():
 				setattr(ad, key, adDict[key])
 		return ad
 	
+	"""return jsensorData, after conversion from jsonData"""
 	def jsonToSensorData(self, jsonData):
 		jsonData = jsonData.replace("\'", "\"").replace('False','false').replace('True', 'true')
 		adDict = json.loads(jsonData)
@@ -61,7 +63,7 @@ class DataUtil():
 		return ad
 
 		
-	
+	"""return systemPerformaceData, after conversion from jsonData"""
 	def jsonToSystemPerformanceData(self, jsonData):
 		jsonData = jsonData.replace("\'", "\"").replace('False','false').replace('True', 'true')
 		adDict = json.loads(jsonData)

@@ -27,6 +27,7 @@ class BaseSystemUtilTask():
 		# TODO: fill in the details here
 		#
 		# NOTE: Use self._getSystemUtil() to retrieve the value from the sub-class
+		"""telemetry generation using SensorData"""
 		self.latestSensorData = SensorData()
 		self.latestSensorData.setValue(self._getSystemUtil())
 		return self.latestSensorData
