@@ -37,6 +37,7 @@ class DeviceDataManager(IDataMessageListener):
 	"""
 	
 	def __init__(self, enableMqtt: bool = True, enableCoap: bool = False):
+		self.mqttClient = MqttClientConnector()
 		self.sysPerfManager = SystemPerformanceManager()
 		self.sensorAdapterManager = SensorAdapterManager()
 		self.actuatorAdapterManager = ActuatorAdapterManager()
@@ -72,6 +73,7 @@ class DeviceDataManager(IDataMessageListener):
 		logging.info("Started DeviceDataManager.")
 		self.sysPerfManager.startManager()
 		self.sensorAdapterManager.startManager()
+		self.mqttClient.disconnectClient()
 		pass
 
 		
