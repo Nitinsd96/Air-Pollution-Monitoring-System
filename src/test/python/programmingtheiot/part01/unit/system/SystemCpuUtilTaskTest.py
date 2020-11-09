@@ -23,6 +23,7 @@ class SystemCpuUtilTaskTest(unittest.TestCase):
 	
 	@classmethod
 	def setUpClass(self):
+		logging.getLogger().setLevel(logging.INFO)
 		logging.basicConfig(format = '%(asctime)s:%(module)s:%(levelname)s:%(message)s', level = logging.DEBUG)
 		logging.info("Testing SystemCpuUtilTask class...")
 		self.cpuUtilTask = SystemCpuUtilTask()
