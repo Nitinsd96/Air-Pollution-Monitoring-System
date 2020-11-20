@@ -8,6 +8,7 @@
 #
 
 from programmingtheiot.data.BaseIotData import BaseIotData
+from _overlapped import NULL
 
 class ActuatorData(BaseIotData):
 	"""
@@ -31,6 +32,9 @@ class ActuatorData(BaseIotData):
 	
 	def __init__(self, actuatorType = DEFAULT_ACTUATOR_TYPE, d = None):
 		self.type = actuatorType
+		self.command = 0
+		self.stateData = NULL
+		self.val = 0.0
 		super(ActuatorData, self).__init__(d = d)
 		
 	

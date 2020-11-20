@@ -1,5 +1,6 @@
 eclipse.preferences.version=1
 encoding//env/Lib/site-packages/pisense/__init__.py=utf-8
 encoding//env/Lib/site-packages/pisense/array.py=utf-8
+encoding//env/Lib/site-packages/pisense/environ.py=utf-8
 encoding//env/Lib/site-packages/pisense/screen.py=utf-8
 encoding//env/Lib/site-packages/sense_emu/gui.py=utf-8

@@ -59,9 +59,9 @@ class DeviceDataManager(IDataMessageListener):
 		pass
 
 	def handleSensorMessage(self, data: SensorData) -> bool:
-			logging("handleSensorMessage method is called...")
-			self._handleUpstreamTransmission(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE, DataUtil.sensorDataToJson(self, data))
-			pass
+		logging("handleSensorMessage method is called...")
+		self._handleUpstreamTransmission(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE, DataUtil.sensorDataToJson(self, data))
+		pass
 		
 	def handleSystemPerformanceMessage(self, data: SystemPerformanceData) -> bool:
 		logging("handleSystemPerformanceMessage method is called...")
@@ -73,7 +73,7 @@ class DeviceDataManager(IDataMessageListener):
 		logging.info("Started DeviceDataManager.")
 		self.sysPerfManager.startManager()
 		self.sensorAdapterManager.startManager()
-		self.mqttClient.disconnectClient()
+		self.mqttClient.connectClient()
 		pass
 
 		
@@ -81,6 +81,7 @@ class DeviceDataManager(IDataMessageListener):
 		logging.info("Stopped DeviceDataManager.")
 		self.sysPerfManager.stopManager()
 		self.sensorAdapterManager.stopManager()
+		self.mqttClient.disconnectClient()
 		pass
 
 

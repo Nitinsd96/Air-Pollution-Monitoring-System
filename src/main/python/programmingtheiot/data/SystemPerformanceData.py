@@ -17,11 +17,12 @@ class SystemPerformanceData(BaseIotData):
 	"""
 	DEFAULT_VAL = 0.0
 	
-	diskUtil = DEFAULT_VAL
-	cpuUtil = DEFAULT_VAL
-	memUtil = DEFAULT_VAL
+	
 	
 	def __init__(self, d = None):
+		self.diskUtil = 0
+		self.cpuUtil = 0
+		self.memUtil = 0
 		super(SystemPerformanceData, self).__init__(d = d)
 		pass
 	

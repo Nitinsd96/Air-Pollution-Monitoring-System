@@ -65,6 +65,7 @@ class MqttClientConnector(IPubSubClient):
 		logging.info('\tMQTT Keep Alive:  ' + str(self.keepAlive))
 		
 	def connectClient(self)->bool:
+		logging.info("Connecting MQTT broker: %s",self.host)
 		if not self.mqttClient:
 			self.mqttClient = mqttClient.Client(client_id = self.clientID, clean_session = True)
 			self.mqttClient.on_connect = self.onConnect
@@ -74,12 +75,12 @@ class MqttClientConnector(IPubSubClient):
 			self.mqttClient.on_subscribe = self.onSubscribe
 
 		if not self.mc.is_connected():
-		    self.mqttClient.connect(self.host, self.port, self.keepAlive)
-		    self.mqttClient.loop_start()
-		    return True
+			self.mqttClient.connect(self.host, self.port, self.keepAlive)
+			self.mqttClient.loop_start()
+			return True
 		else:
-		    logging.warn('MQTT client is already connected. Ignoring connect request.')
-		    return False
+			logging.warn('MQTT client is already connected. Ignoring connect request.')
+			return False
 	
 	def disconnectClient(self)->bool:
 		logging.info("Disconnecting MQTT broker: %s",self.host)
@@ -91,7 +92,6 @@ class MqttClientConnector(IPubSubClient):
 			logging.warn("MQTT client is not connected")
 			return False
 		pass
-	
 	
 	
 	def connect(self) -> bool:

@@ -42,12 +42,19 @@ class DataUtil():
 	def jsonToActuatorData(self, jsonData):
 		jsonData = jsonData.replace("\'", "\"").replace('False','false').replace('True', 'true')
 		adDict = json.loads(jsonData)
+# 		print("value of adDict---")
+# 		print(adDict)
 		ad = ActuatorData()
+# 		print("value of ad---")
+# 		print(ad)
 		mvDict = vars(ad)
-
+# 		print("value of mvDict---")
+# 		print(mvDict)
 		for key in adDict:
 			if key in mvDict:
 				setattr(ad, key, adDict[key])
+# 		print("value of adDict---2nd")
+# 		print(adDict)
 		return ad
 	
 	"""return jsensorData, after conversion from jsonData"""
@@ -55,6 +62,7 @@ class DataUtil():
 		jsonData = jsonData.replace("\'", "\"").replace('False','false').replace('True', 'true')
 		adDict = json.loads(jsonData)
 		ad = SensorData()
+		print(ad)
 		mvDict = vars(ad)
 
 		for key in adDict:

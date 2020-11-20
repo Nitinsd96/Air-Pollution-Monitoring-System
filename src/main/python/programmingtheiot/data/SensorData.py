@@ -26,6 +26,8 @@ class SensorData(BaseIotData):
 	
 
 	def __init__(self, sensorType = DEFAULT_SENSOR_TYPE, d = None):
+		self.sensorValue = 0.0
+		self.sensorType = 0
 		super(SensorData, self).__init__(d = d)
 		"i added"
 		
