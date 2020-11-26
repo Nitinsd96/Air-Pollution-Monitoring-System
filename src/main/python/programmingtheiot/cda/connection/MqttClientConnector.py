@@ -74,7 +74,7 @@ class MqttClientConnector(IPubSubClient):
 			self.mqttClient.on_publish = self.onPublish
 			self.mqttClient.on_subscribe = self.onSubscribe
 
-		if not self.mc.is_connected():
+		if not self.mqttClient.is_connected():
 			self.mqttClient.connect(self.host, self.port, self.keepAlive)
 			self.mqttClient.loop_start()
 			return True
@@ -94,11 +94,6 @@ class MqttClientConnector(IPubSubClient):
 		pass
 	
 	
-	def connect(self) -> bool:
-		pass
-		
-	def disconnect(self) -> bool:
-		pass
 		
 	def onConnect(self, client, userdata, flags, rc):
 		logging.info("Connected to MQTT broker. Result code %s",str(rc))

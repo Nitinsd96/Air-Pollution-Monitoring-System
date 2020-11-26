@@ -47,11 +47,11 @@ class MqttClientConnectorTest(unittest.TestCase):
 	def testConnectAndDisconnect(self):
 		delay = self.cfg.getInteger(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE)
 		
-		self.mcc.connect()
+		self.mcc.connectClient()
 		
 		sleep(delay + 5)
 		
-		self.mcc.disconnect()
+		self.mcc.disconnectClient()
 
 	#@unittest.skip("Ignore for now.")
 	def testConnectAndPublish(self):
@@ -59,7 +59,7 @@ class MqttClientConnectorTest(unittest.TestCase):
 		delay = self.cfg.getInteger(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE)
 		listener = DefaultDataMessageListener()
 		
-		self.mcc.connect()
+		self.mcc.connectClient()
 		self.mcc.subscribeToTopic(ResourceNameEnum.CDA_MGMT_STATUS_MSG_RESOURCE, qos)
 		sleep(5)
 		
@@ -71,9 +71,9 @@ class MqttClientConnectorTest(unittest.TestCase):
 		
 		sleep(delay)
 		
-		self.mcc.disconnect()
+		self.mcc.disconnectClient()
 
-	#@unittest.skip("Ignore for now.")
+	@unittest.skip("Ignore for now.")
 	def testIntegrateWithGdaSubscribeCdaCmdTopic(self):
 		qos = 1
 		delay = self.cfg.getInteger(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE)
@@ -84,7 +84,7 @@ class MqttClientConnectorTest(unittest.TestCase):
 		
 		sleep(delay)
 		
-		self.mcc.disconnect()
+		self.mcc.disconnectClient()
 
 	@unittest.skip("Ignore for now.")
 	def testIntegrateWithGdaPublishCdaMgmtTopic(self):
@@ -92,12 +92,12 @@ class MqttClientConnectorTest(unittest.TestCase):
 		delay = self.cfg.getInteger(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE)
 		listener = DefaultDataMessageListener()
 		
-		self.mcc.connect()
+		self.mcc.connectClient()
 		self.mcc.publishMessage(ResourceNameEnum.CDA_MGMT_STATUS_MSG_RESOURCE, "TEST: This is the CDA message payload.", qos)
 		
 		sleep(5)
 		
-		self.mcc.disconnect()
+		self.mcc.disconnectClient()
 
 if __name__ == "__main__":
 	unittest.main()

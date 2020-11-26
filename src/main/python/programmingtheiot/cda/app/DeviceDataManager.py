@@ -37,7 +37,8 @@ class DeviceDataManager(IDataMessageListener):
 	"""
 	
 	def __init__(self, enableMqtt: bool = True, enableCoap: bool = False):
-		self.mqttClient = MqttClientConnector()
+		if enableMqtt==True:
+			self.mqttClient = MqttClientConnector()
 		self.sysPerfManager = SystemPerformanceManager()
 		self.sensorAdapterManager = SensorAdapterManager()
 		self.actuatorAdapterManager = ActuatorAdapterManager()
