@@ -28,7 +28,7 @@ class BaseIotData(object):
 	
 	sensorValue = 0
 	
-	def __init__(self, d = None):
+	def __init__(self, name = ConfigConst.NOT_SET, d = None):
 		"""
 		Constructor.
 		
@@ -36,6 +36,30 @@ class BaseIotData(object):
 		It's provided here as a convenience - mostly for testing purposes. The utility
 		in DataUtil should be used instead.
 		"""
+		
+		"""
+		 Code updates: Since programmingtheiot.data.BaseIotData already has a variable
+		 named name, we simply need to add a parameter to its constructor to set this
+		  from sub-class super() calls, and ensure each sub-class is constructed with 
+		  the appropriate label from ConfigConst. This means that any place in the code 
+		  where a SensorData orActuatorData instance is created will need a very minor 
+		  modification to include the setting of name at construction.
+		
+		
+		if d:
+			print("d is running")
+			self.name = d['name']
+			self.timeStamp = d['timeStamp']
+			self.hasError = d['hasError']
+			self.statusCode = d['statusCode']
+		else:
+			print("else is running")
+			print(name)
+			self.updateTimeStamp()
+			self.name = name
+			self.hasError = False
+			self.statusCode = self.DEFAULT_STATUS
+			"""
 		if d:
 			self.name = d['name']
 			self.timeStamp = d['timeStamp']

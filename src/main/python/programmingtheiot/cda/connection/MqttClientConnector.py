@@ -17,7 +17,7 @@ from programmingtheiot.common.IDataMessageListener import IDataMessageListener
 from programmingtheiot.common.ResourceNameEnum import ResourceNameEnum
 
 from programmingtheiot.cda.connection.IPubSubClient import IPubSubClient
-
+from programmingtheiot.data.DataUtil import DataUtil
 
 DEFAULT_QOS = 1
 
@@ -52,13 +52,14 @@ class MqttClientConnector(IPubSubClient):
 		self.keepAlive = self.config.getInteger(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE)
 		
 		
-		if not clientID and self.AUTOGEN_CLIENTID:
-			self.clientID = 'CDAMqttClientID'
-			logging.info("Using auto generated clientID: %s", clientID)
-		else:
-			self.clientID = clientID
-			logging.info("Using requested ClientID: %s", clientID)
-			
+		self.clientID = None
+# 		if not clientID and self.AUTOGEN_CLIENTID:
+# 			self.clientID = 'CDAMqttClientID'
+# 			logging.info("Using auto generated clientID: %s", clientID)
+# 		else:
+# 			self.clientID = clientID
+# 			logging.info("Using requested ClientID: %s", clientID)
+ 			
 			
 		logging.info('\tMQTT Broker Host: ' + self.host)
 		logging.info('\tMQTT Broker Port: ' + str(self.port))
@@ -87,20 +88,24 @@ class MqttClientConnector(IPubSubClient):
 		if self.mqttClient.is_connected():
 			self.mqttClient.disconnect()
 			self.mqttClient.loop_stop()
-			return True
-		else:
-			logging.warn("MQTT client is not connected")
-			return False
+		return True
+# 		else:
+# 			logging.warn("MQTT client is not connected")
+# 			return False
 		pass
 	
 	
 		
 	def onConnect(self, client, userdata, flags, rc):
 		logging.info("Connected to MQTT broker. Result code %s",str(rc))
-		pass
+		logging.info('[Callback] Connected to MQTT broker. Result code: ' + str(rc))
+		# NOTE: Use the QoS of your choice - '1' is only an example
+		self.mqttClient.subscribe(topic = ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE.value, qos = 1)
+		self.mqttClient.message_callback_add(sub = ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE.value, callback = self.onActuatorCommandMessage)
+		
 		
 	def onDisconnect(self, client, userdata, rc):
-		logging.info("Disconnected from MQTT broker. Result code %s",str(rc))
+		#logging.info("Disconnected from MQTT broker. Result code %s",str(rc))
 		pass
 		
 	def onMessage(self, client, userdata, msg):
@@ -117,30 +122,48 @@ class MqttClientConnector(IPubSubClient):
 		logging.info("Subscribed Message: %s", str(mid))
 		pass
 	
-	def publishMessage(self, resource: ResourceNameEnum, msg, qos: int = IPubSubClient.DEFAULT_QOS):
-		logging.info("Called publishMessage %s", msg)
-		if(resource == None):
-			return False
-		else:
-			if(qos < 0 or qos >2 ):
-				qos = DEFAULT_QOS
-			return True
-		pass
+	def publishMessage(self, resource: ResourceNameEnum, msg, qos):
+		#logging.info("Called publishMessage %s", msg)
+		topic = resource.value
+# 		if(resource == None):
+# 			return False
+# 		#else:
+		if(qos < 0 or qos >2 ):
+			qos = IPubSubClient.DEFAULT_QOS
+		msgInfo = self.mqttClient.publish(topic=topic, payload=msg, qos=qos)
+		msgInfo.wait_for_publish()
+		return True
+		
 	
-	def subscribeToTopic(self, resource: ResourceNameEnum, qos: int = IPubSubClient.DEFAULT_QOS):
+	def subscribeToTopic(self, resource: ResourceNameEnum, qos):
 		logging.info("Called subscribeToTopic %s", str(resource.getResourceNameByValue(resource)))
-		if(resource == None):
-			return False
-		else:
-			if(qos < 0 or qos >2 ):
-				qos = DEFAULT_QOS
-			return True
-		pass
+		topic = resource.value
+		#else:
+		if(qos < 0 or qos >2 ):
+			qos = IPubSubClient.DEFAULT_QOS
+		self.mqttClient.subscribe(topic=topic, qos=qos)
+		return True
+	
 	
 	def unsubscribeFromTopic(self, resource: ResourceNameEnum):
+		self.mqttClient.unsubscribe(topic=resource.value)
 		pass
 
 	def setDataMessageListener(self, listener: IDataMessageListener) -> bool:
 		logging.info("Called setDataMessageListener")
+		if listener:
+			self.dataMsgListener = listener
+			return True
 		return False
-		pass
+
+	def onActuatorCommandMessage(self, client, userdata, msg):
+		logging.info('[Callback] Actuator command message received. Topic: %s.', msg.topic)
+ 		
+		if self.dataMsgListener:
+			try:
+				# assumes all data is encoded using UTF-8 (between GDA and CDA)
+				actuatorData = DataUtil().jsonToActuatorData(msg.payload.decode('utf-8'))
+ 				
+				self.dataMsgListener.handleActuatorCommandMessage(actuatorData)
+			except:
+				logging.exception("Failed to convert incoming actuation command payload to ActuatorData: ")

@@ -10,6 +10,7 @@
 import logging
 import random
 
+import programmingtheiot.common.ConfigConst as ConfigConst
 from programmingtheiot.data.SensorData import SensorData
 
 class BaseSensorSimTask():
@@ -22,7 +23,8 @@ class BaseSensorSimTask():
 	DEFAULT_MAX_VAL = 1000.0
 	
 	def __init__(self, sensorType: int = SensorData.DEFAULT_SENSOR_TYPE, dataSet = None, minVal: float = DEFAULT_MIN_VAL, maxVal: float = DEFAULT_MAX_VAL):
-		   						
+		
+# 		self.sensorName = sensorName			
 		self.LatestSensorData = SensorData() 
 		self.LatestSensorData.minVal = minVal
 		self.LatestSensorData.maxVal = maxVal
@@ -37,19 +39,19 @@ class BaseSensorSimTask():
 			
 	
 	def generateTelemetry(self) -> SensorData:
-# 		sensorData = SensorData(sensorType = self.sensorType)    
-# 		newValue = 0
-# 		sensorData.DEFAULT_SENSOR_TYPE = self.sensorType
-# 		
+# 		sensorData = SensorData(sensorType = self.sensorType, name = self.sensorName)    
+# 		sensorData.sensorType = self.LatestSensorData.sensorType
+# 		#sensorData.DEFAULT_SENSOR_TYPE = self.sensorType
+#  		
 # 		if self.useRandomizer == True :
-# 			newValue = random.randint(self.minVal,self.maxVal)         
+# 			newValue = random.randint(self.LatestSensorData.minVal,self.LatestSensorData.maxVal)         
 # 		else:
 # 			newValue = self.dataSet.getDataEntry(self.currentDataSetIndex)
 # 			if self.currentDataSetIndex == self.dataSet.getDataEntryCount():
 # 				self.currentDataSetIndex = 0
 # 			else:
 # 				self.currentDataSetIndex = self.currentDataSetIndex+1
-# 				
+#  				
 # 		sensorData.setValue(newValue)		
 # 		self.LatestSensorData = sensorData
 		

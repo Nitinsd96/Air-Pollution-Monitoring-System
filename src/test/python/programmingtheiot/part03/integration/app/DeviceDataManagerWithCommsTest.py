@@ -54,7 +54,7 @@ class DeviceDataManagerWithCommsTest(unittest.TestCase):
 		
 		ddMgr.stopManager()
 
-	#@unittest.skip("Ignore for now.")
+	@unittest.skip("Ignore for now.")
 	def testStartAndStopManagerWithCoap(self):
 		ddMgr = DeviceDataManager(enableMqtt = False, enableCoap = True)
 		ddMgr.startManager()
@@ -63,7 +63,7 @@ class DeviceDataManagerWithCommsTest(unittest.TestCase):
 		
 		ddMgr.stopManager()
 
-	#@unittest.skip("Ignore for now.")
+	@unittest.skip("Ignore for now.")
 	def testStartAndStopManagerWithMqttAndCoap(self):
 		ddMgr = DeviceDataManager(enableMqtt = True, enableCoap = True)
 		ddMgr.startManager()
@@ -71,6 +71,19 @@ class DeviceDataManagerWithCommsTest(unittest.TestCase):
 		sleep(30)
 		
 		ddMgr.stopManager()
+	
+	@unittest.skip("Ignore")	
+	def testDeviceDataManagerIntegration(self):
+		# TODO: set either MQTT or CoAP to True - you'll only need one.
+		ddMgr = DeviceDataManager(enableMqtt = True, enableCoap = False)
+		ddMgr.startManager()
+		
+		# 5 min's should be long enough to run the tests and manually adjust the emulator values
+		sleep(300)
+		
+		ddMgr.stopManager()
+		
+		
 
 if __name__ == "__main__":
 	unittest.main()

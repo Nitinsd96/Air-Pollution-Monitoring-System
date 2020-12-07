@@ -26,13 +26,19 @@ class SensorData(BaseIotData):
 	
 
 	def __init__(self, sensorType = DEFAULT_SENSOR_TYPE, d = None):
-		self.sensorValue = SensorData.DEFAULT_VAL
-		self.sensorType = sensorType
+		
 		super(SensorData, self).__init__(d = d)
-		"i added"
+# 		"i added"
+# 		if d:
+# 			self.sensorValue = d['value']
+# 			self.sensorType = d['sensorType']
+# 		else:
+# 			self.sensorValue = SensorData.DEFAULT_VAL
+# 			self.sensorType = sensorType
 		
 	
 	def getSensorType(self) -> int:
+		
 		"""
 		Returns the sensor type to the caller.
 		

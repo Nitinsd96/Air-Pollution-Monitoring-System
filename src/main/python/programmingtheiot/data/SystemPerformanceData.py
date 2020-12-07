@@ -7,6 +7,7 @@
 # and designed to be modified by the student as needed.
 #
 
+import programmingtheiot.common.ConfigConst as ConfigConst
 from programmingtheiot.data.BaseIotData import BaseIotData
 from numpy.distutils.cpuinfo import cpu
 
@@ -20,11 +21,16 @@ class SystemPerformanceData(BaseIotData):
 	
 	
 	def __init__(self, d = None):
-		self.diskUtil = 0
-		self.cpuUtil = 0
-		self.memUtil = 0
 		super(SystemPerformanceData, self).__init__(d = d)
-		pass
+# 		super(SystemPerformanceData, self).__init__(name = ConfigConst.SYS_PERF_DATA, d = d)
+# 		if d:
+# 			self.diskUtil = d['diskUtil']
+# 			self.cpuUtil = d['cpuUtil']
+# 			self.memUtil = d['memUtil']
+# 		else :
+# 			self.diskUtil = self.DEFAULT_VAL
+# 			self.cpuUtil = self.DEFAULT_VAL
+# 			self.memUtil = self.DEFAULT_VAL
 	
 	def getCpuUtilization(self):
 		return self.cpuUtil

@@ -38,7 +38,7 @@ class HumiditySensorEmulatorTask(BaseSensorSimTask):
 	
 	"""Returning Object with latest value for humidity"""
 	def generateTelemetry(self) -> SensorData:
-		sensorData = SensorData(sensorType = 1)
+		sensorData = SensorData( sensorType = 1)
 		sensorVal = self.sh.environ.humidity		
 		sensorData.setValue(sensorVal)
 		self.LatestSensorData = sensorData

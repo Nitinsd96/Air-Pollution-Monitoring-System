@@ -100,6 +100,8 @@ class ActuatorAdapterManager(object):
 					logging.info("Emulating HVAC actuator ON:")
 					logging.info(" HVAC value : %s",data.getValue())
 					self.hvacEmulator._handleActuation(data.getCommand(), data.getValue())
+					
+					
 					return True           
 			
 	def setDataMessageListener(self, listener: IDataMessageListener) -> bool:

@@ -7,6 +7,8 @@
 # and designed to be modified by the student as needed.
 #
 import json
+import logging
+
 from json import JSONEncoder
 
 from programmingtheiot.data.ActuatorData import ActuatorData
@@ -21,11 +23,14 @@ class DataUtil():
 	
 	
 	def __init__(self, encodeToUtf8 = False):
+		logging.info("Created Data Util instance")
 		pass
 	
 	"""return jsonData, after conversion from actuatorData"""
 	def actuatorDataToJson(self, actuatorData):
+		logging.info("Encoding Actuator Data to Json [pre] -->" + str(actuatorData))
 		jsonData = json.dumps(actuatorData, indent = 4, cls = JsonDataEncoder, ensure_ascii = True)
+		logging.info("Encoding Actuator Data to Json [post] --->" + jsonData)
 		return jsonData
 	
 	"""return jsonData, after conversion from SensorData"""

@@ -38,11 +38,21 @@ class DeviceDataManager(IDataMessageListener):
 	
 	def __init__(self, enableMqtt: bool = True, enableCoap: bool = False):
 		if enableMqtt==True:
-			self.mqttClient = MqttClientConnector()
+			self.mqttClient = MqttClientConnector(clientID = 'CDAMqttClientConnectorTest001')
+			self.mqttClient.setDataMessageListener(self)
+			
 		self.sysPerfManager = SystemPerformanceManager()
+		self.sysPerfManager.setDataMessageListener(self)
+		
 		self.sensorAdapterManager = SensorAdapterManager()
+		self.sensorAdapterManager.setDataMessageListener(self)
+		
 		self.actuatorAdapterManager = ActuatorAdapterManager()
+		self.actuatorAdapterManager.setDataMessageListener(self)
+		
 		self.configUtil = ConfigUtil()
+		self.dataUtil = DataUtil()
+		
 		self.enableHandleTempChangeOnDevice = self.configUtil.getBoolean(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.ENABLE_HANDLE_TEMP_CHANGE_ON_DEVICE_KEY)
 		self.triggerHvacTempFloor = self.configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.TRIGGER_HVAC_TEMP_FLOOR_KEY)
 		self.triggerHvacTempCeiling = self.configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.TRIGGER_HVAC_TEMP_CEILING_KEY)
@@ -50,7 +60,9 @@ class DeviceDataManager(IDataMessageListener):
 			
 	def handleActuatorCommandResponse(self, data: ActuatorData) -> bool:
 		logging("handleActuatorCommandResponse method is called...")
-		self._handleUpstreamTransmission(ResourceNameEnum.CDA_ACTUATOR_RESPONSE_RESOURCE, DataUtil.actuatorDataToJson(self, data))
+		d = self.dataUtil.actuatorDataToJson(data)
+		logging.info("Incoming actuator response received (from actuator manager):"+ d)
+		self._handleUpstreamTransmission(ResourceNameEnum.CDA_ACTUATOR_RESPONSE_RESOURCE, d)
 		pass
 
 	
@@ -121,5 +133,17 @@ class DeviceDataManager(IDataMessageListener):
 		2) Act on msg: If # 1 is true, send message upstream using one (or both) client connections.
 		"""
 		logging("_handleUpstreamTransmission method is called...")
+		MqttClientConnector.publishMessage(self, resourceName, msg, 1)
 		pass
+	
+	def handleActuatorCommandMessage(self, data: ActuatorData) -> bool:
+		if data:
+			logging.info("Processing actuator command message.")
+			
+			# TODO: add further validation before sending the command
+			self.actuatorAdapterManager.sendActuatorCommand(data)
+			return True
+		else:
+			logging.warning("Received invalid ActuatorData command message. Ignoring.")
+			return False
 
