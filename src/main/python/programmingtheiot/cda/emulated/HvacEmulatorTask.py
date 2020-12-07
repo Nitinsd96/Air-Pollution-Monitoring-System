@@ -31,7 +31,7 @@ class HvacEmulatorTask(BaseActuatorSimTask):
 	"""
 	enableEmulation = None
 	def __init__(self):
-		super(HvacEmulatorTask, self).__init__(actuatorType = ActuatorData.HVAC_ACTUATOR_TYPE, simpleName = "HVAC")
+		super(HvacEmulatorTask, self).__init__(actuatorType = ActuatorData.HVAC_ACTUATOR_TYPE, simpleName = "HVAC",actuatorName = ConfigConst.HVAC_ACTUATOR_NAME)
 		enableEmulation = False
 		if ConfigConst.ENABLE_SENSE_HAT_KEY == True:
 			enableEmulation = True 

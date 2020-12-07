@@ -8,6 +8,7 @@
 #
 
 from programmingtheiot.data.BaseIotData import BaseIotData
+import programmingtheiot.common.ConfigConst as ConfigConst
 
 class SensorData(BaseIotData):
 	"""
@@ -25,16 +26,16 @@ class SensorData(BaseIotData):
 	
 	
 
-	def __init__(self, sensorType = DEFAULT_SENSOR_TYPE, d = None):
+	def __init__(self, sensorType : int = DEFAULT_SENSOR_TYPE, name = ConfigConst.NOT_SET, d = None):
 		
-		super(SensorData, self).__init__(d = d)
-# 		"i added"
-# 		if d:
-# 			self.sensorValue = d['value']
-# 			self.sensorType = d['sensorType']
-# 		else:
-# 			self.sensorValue = SensorData.DEFAULT_VAL
-# 			self.sensorType = sensorType
+		super(SensorData, self).__init__(name = name , d = d)
+		"i added"
+		if d:
+			self.sensorValue = d['value']
+			self.sensorType = d['sensorType']
+		else:
+			self.sensorValue = SensorData.DEFAULT_VAL
+			self.sensorType = sensorType
 		
 	
 	def getSensorType(self) -> int:

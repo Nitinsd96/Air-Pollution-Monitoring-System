@@ -22,7 +22,7 @@ class HumidifierActuatorSimTask(BaseActuatorSimTask):
 	"""
 
 	def __init__(self):
-		super(HumidifierActuatorSimTask, self).__init__(actuatorType = ActuatorData.HUMIDIFIER_ACTUATOR_TYPE, simpleName = "HUMIDIFIER")
+		super(HumidifierActuatorSimTask, self).__init__(actuatorType = ActuatorData.HUMIDIFIER_ACTUATOR_TYPE, simpleName = "HUMIDIFIER",actuatorName = ConfigConst.HUMIDIFIER_ACTUATOR_NAME)
 		
 	def activateActuator(self, val: float) -> bool:
 		pass

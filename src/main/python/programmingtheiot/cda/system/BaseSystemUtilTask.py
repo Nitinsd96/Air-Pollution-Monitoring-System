@@ -29,7 +29,7 @@ class BaseSystemUtilTask():
 		#
 		# NOTE: Use self._getSystemUtil() to retrieve the value from the sub-class
 		"""telemetry generation using SensorData"""
-		self.latestSensorData = SensorData()
+		self.latestSensorData = SensorData(name = self.sensorName)
 		self.latestSensorData.setValue(self._getSystemUtil())
 		return self.latestSensorData
 		

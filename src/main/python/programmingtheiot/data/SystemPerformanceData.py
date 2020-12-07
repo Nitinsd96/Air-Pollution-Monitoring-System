@@ -20,17 +20,19 @@ class SystemPerformanceData(BaseIotData):
 	
 	
 	
-	def __init__(self, d = None):
-		super(SystemPerformanceData, self).__init__(d = d)
+	def __init__(self,name = ConfigConst.NOT_SET, d = None):
+		
 # 		super(SystemPerformanceData, self).__init__(name = ConfigConst.SYS_PERF_DATA, d = d)
-# 		if d:
-# 			self.diskUtil = d['diskUtil']
-# 			self.cpuUtil = d['cpuUtil']
-# 			self.memUtil = d['memUtil']
-# 		else :
-# 			self.diskUtil = self.DEFAULT_VAL
-# 			self.cpuUtil = self.DEFAULT_VAL
-# 			self.memUtil = self.DEFAULT_VAL
+		super(SystemPerformanceData, self).__init__(name = name, d = d)
+		
+		if d:
+			self.diskUtil = d['diskUtil']
+			self.cpuUtil = d['cpuUtil']
+			self.memUtil = d['memUtil']
+		else :
+			self.diskUtil = self.DEFAULT_VAL
+			self.cpuUtil = self.DEFAULT_VAL
+			self.memUtil = self.DEFAULT_VAL
 	
 	def getCpuUtilization(self):
 		return self.cpuUtil

@@ -23,6 +23,7 @@ class HumiditySensorSimTaskTest(unittest.TestCase):
 	
 	@classmethod
 	def setUpClass(self):
+		logging.getLogger().setLevel(logging.INFO)
 		logging.basicConfig(format = '%(asctime)s:%(module)s:%(levelname)s:%(message)s', level = logging.DEBUG)
 		logging.info("Testing HumiditySensorSimTask class...")
 		self.hSimTask = HumiditySensorSimTask()

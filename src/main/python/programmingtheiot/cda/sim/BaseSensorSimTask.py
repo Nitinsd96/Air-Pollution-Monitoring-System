@@ -22,10 +22,10 @@ class BaseSensorSimTask():
 	DEFAULT_MIN_VAL = 0.0
 	DEFAULT_MAX_VAL = 1000.0
 	
-	def __init__(self, sensorType: int = SensorData.DEFAULT_SENSOR_TYPE, dataSet = None, minVal: float = DEFAULT_MIN_VAL, maxVal: float = DEFAULT_MAX_VAL):
+	def __init__(self, sensorType: int = SensorData.DEFAULT_SENSOR_TYPE, dataSet = None, minVal: float = DEFAULT_MIN_VAL, maxVal: float = DEFAULT_MAX_VAL,sensorName = ConfigConst.NOT_SET):
 		
 # 		self.sensorName = sensorName			
-		self.LatestSensorData = SensorData() 
+		self.LatestSensorData = SensorData(sensorType,sensorName) 
 		self.LatestSensorData.minVal = minVal
 		self.LatestSensorData.maxVal = maxVal
 		self.LatestSensorData.dataSet = dataSet
@@ -39,23 +39,23 @@ class BaseSensorSimTask():
 			
 	
 	def generateTelemetry(self) -> SensorData:
-# 		sensorData = SensorData(sensorType = self.sensorType, name = self.sensorName)    
-# 		sensorData.sensorType = self.LatestSensorData.sensorType
-# 		#sensorData.DEFAULT_SENSOR_TYPE = self.sensorType
-#  		
-# 		if self.useRandomizer == True :
-# 			newValue = random.randint(self.LatestSensorData.minVal,self.LatestSensorData.maxVal)         
-# 		else:
-# 			newValue = self.dataSet.getDataEntry(self.currentDataSetIndex)
-# 			if self.currentDataSetIndex == self.dataSet.getDataEntryCount():
-# 				self.currentDataSetIndex = 0
-# 			else:
-# 				self.currentDataSetIndex = self.currentDataSetIndex+1
-#  				
-# 		sensorData.setValue(newValue)		
-# 		self.LatestSensorData = sensorData
+		sensorData = SensorData(sensorType = self.sensorType, name = self.sensorName)    
+		sensorData.sensorType = self.LatestSensorData.sensorType
+		#sensorData.DEFAULT_SENSOR_TYPE = self.sensorType
 		
-		self.LatestSensorData.setValue(random.randint(self.LatestSensorData.minVal,self.LatestSensorData.maxVal))
+		if self.useRandomizer == True :
+			newValue = random.randint(self.LatestSensorData.minVal,self.LatestSensorData.maxVal)         
+		else:
+			newValue = self.dataSet.getDataEntry(self.currentDataSetIndex)
+			if self.currentDataSetIndex == self.dataSet.getDataEntryCount():
+				self.currentDataSetIndex = 0
+			else:
+				self.currentDataSetIndex = self.currentDataSetIndex+1
+				
+		sensorData.setValue(newValue)		
+		self.LatestSensorData = sensorData
+		
+		#self.LatestSensorData.setValue(random.randint(self.LatestSensorData.minVal,self.LatestSensorData.maxVal))
 		return self.LatestSensorData
 	
 	def getTelemetryValue(self) -> float:

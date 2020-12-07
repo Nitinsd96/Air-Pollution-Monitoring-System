@@ -31,25 +31,25 @@ class ActuatorData(BaseIotData):
 	
 	command = None
 	
-	def __init__(self, actuatorType = DEFAULT_ACTUATOR_TYPE,name = ConfigConst.NOT_SET , d = None):
+	def __init__(self, actuatorType :int = DEFAULT_ACTUATOR_TYPE,name = ConfigConst.NOT_SET , d = None):
 		
 # 		super(ActuatorData, self).__init__(name = name, d = d)
 		
-		super(ActuatorData, self).__init__(d = d)
-# 		
-# 		self.type = actuatorType
-# 		self.isResponse = False
-# 		
-# 		if d:
-# 			self.command = d['command']
-# 			self.stateData = d['stateData']
-# 			self.val = d['curValue']
-# 			self.type = d['actuatorType']
-# 		else:
-		self.command = self.DEFAULT_COMMAND
-		self.stateData = None
-		self.val = self.DEFAULT_VAL
+		super(ActuatorData, self).__init__(name=name,d = d)
+ 		
 		self.type = actuatorType
+		self.isResponse = False
+ 		
+		if d:
+			self.command = d['command']
+			self.stateData = d['stateData']
+			self.val = d['curValue']
+			self.type = d['actuatorType']
+		else:
+			self.command = self.DEFAULT_COMMAND
+			self.stateData = None
+			self.val = self.DEFAULT_VAL
+			self.type = actuatorType
 		
 	
 	def getCommand(self) -> int:

@@ -19,10 +19,10 @@ class BaseActuatorSimTask():
 	
 	"""
 
-	def __init__(self, actuatorType: int = ActuatorData.DEFAULT_ACTUATOR_TYPE, simpleName: str = "Actuator"):
+	def __init__(self, actuatorType: int = ActuatorData.DEFAULT_ACTUATOR_TYPE, simpleName: str = "Actuator",actuatorName = ConfigConst.NOT_SET):
 		self.actuatorType = actuatorType
 		
-		self.LatestActuatorData = ActuatorData(actuatorType)
+		self.LatestActuatorData = ActuatorData(actuatorType,name = actuatorName)
 		self.simpleName = simpleName
 	
 		

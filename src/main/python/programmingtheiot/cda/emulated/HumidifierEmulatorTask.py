@@ -29,7 +29,7 @@ class HumidifierEmulatorTask(BaseActuatorSimTask):
 	
 	enableEmulation = None
 	def __init__(self):
-		super(HumidifierEmulatorTask, self).__init__(actuatorType = ActuatorData.HUMIDIFIER_ACTUATOR_TYPE, simpleName = "HUMIDIFIER")
+		super(HumidifierEmulatorTask, self).__init__(actuatorType = ActuatorData.HUMIDIFIER_ACTUATOR_TYPE, simpleName = "HUMIDIFIER",actuatorName = ConfigConst.HUMIDIFIER_ACTUATOR_NAME)
 		if(ConfigConst.ENABLE_SENSE_HAT_KEY == True):
 			self.enableEmulation = True
 		elif(ConfigConst.ENABLE_SENSE_HAT_KEY == False):

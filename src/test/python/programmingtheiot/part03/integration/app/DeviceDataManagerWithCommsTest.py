@@ -45,7 +45,7 @@ class DeviceDataManagerWithCommsTest(unittest.TestCase):
 	def tearDown(self):
 		pass
 
-	#@unittest.skip("Ignore for now.")
+	@unittest.skip("Ignore for now.")
 	def testStartAndStopManagerWithMqtt(self):
 		ddMgr = DeviceDataManager(enableMqtt = True, enableCoap = False)
 		ddMgr.startManager()

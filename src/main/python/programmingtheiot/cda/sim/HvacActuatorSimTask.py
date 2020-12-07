@@ -21,7 +21,7 @@ class HvacActuatorSimTask(BaseActuatorSimTask):
 	"""
 
 	def __init__(self):
-		super(HvacActuatorSimTask, self).__init__(actuatorType = ActuatorData.HVAC_ACTUATOR_TYPE, simpleName = "HVAC")
+		super(HvacActuatorSimTask, self).__init__(actuatorType = ActuatorData.HVAC_ACTUATOR_TYPE, simpleName = "HVAC",actuatorName = ConfigConst.HVAC_ACTUATOR_NAME)
 		
 	def activateActuator(self, val: float) -> bool:
 		pass

@@ -28,7 +28,7 @@ class LedDisplayEmulatorTask(BaseActuatorSimTask):
 	"""
 	enableEmulation = None
 	def __init__(self):
-		super(LedDisplayEmulatorTask, self).__init__(actuatorType = ActuatorData.LED_DISPLAY_ACTUATOR_TYPE, simpleName = "LED_Display")
+		super(LedDisplayEmulatorTask, self).__init__(actuatorType = ActuatorData.LED_DISPLAY_ACTUATOR_TYPE, simpleName = "LED_Display",actuatorName = ConfigConst.LED_ACTUATOR_NAME)
 		if(ConfigConst.ENABLE_SENSE_HAT_KEY == True):
 			self.enableEmulation = True
 		elif(ConfigConst.ENABLE_SENSE_HAT_KEY == False):

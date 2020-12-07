@@ -45,7 +45,7 @@ class BaseIotData(object):
 		  where a SensorData orActuatorData instance is created will need a very minor 
 		  modification to include the setting of name at construction.
 		
-		
+		"""
 		if d:
 			print("d is running")
 			self.name = d['name']
@@ -59,17 +59,7 @@ class BaseIotData(object):
 			self.name = name
 			self.hasError = False
 			self.statusCode = self.DEFAULT_STATUS
-			"""
-		if d:
-			self.name = d['name']
-			self.timeStamp = d['timeStamp']
-			self.hasError = d['hasError']
-			self.statusCode = d['statusCode']
-		else:
-			self.updateTimeStamp()
-			self.name = ConfigConst.NOT_SET
-			self.hasError = False
-			self.statusCode = self.DEFAULT_STATUS
+			
 	
 	def getName(self) -> str:
 		"""
