@@ -30,6 +30,7 @@ class HumiditySensorEmulatorTask(BaseSensorSimTask):
 	enableEmulation = None
 	def __init__(self, dataSet = None):
 		super(HumiditySensorEmulatorTask, self).__init__(SensorData.HUMIDITY_SENSOR_TYPE, minVal = SensorDataGenerator.LOW_NORMAL_ENV_HUMIDITY, maxVal = SensorDataGenerator.HI_NORMAL_ENV_HUMIDITY)
+		self.sensorType = SensorData.HUMIDITY_SENSOR_TYPE
 		if(ConfigConst.ENABLE_SENSE_HAT_KEY == True):
 			self.enableEmulation = True
 		elif(ConfigConst.ENABLE_SENSE_HAT_KEY == False):
@@ -42,5 +43,5 @@ class HumiditySensorEmulatorTask(BaseSensorSimTask):
 		sensorVal = self.sh.environ.humidity		
 		sensorData.setValue(sensorVal)
 		self.LatestSensorData = sensorData
-
+		print("-------Sensor Type %s and Value %s--------- ",str(self.LatestSensorData.sensorType),str(self.LatestSensorData.sensorValue))
 		return self.LatestSensorData

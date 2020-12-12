@@ -17,7 +17,6 @@ from programmingtheiot.cda.sim.TemperatureSensorSimTask import TemperatureSensor
 from programmingtheiot.cda.sim.HumiditySensorSimTask import HumiditySensorSimTask
 from programmingtheiot.cda.sim.PressureSensorSimTask import PressureSensorSimTask 
 
-
 from programmingtheiot.cda.sim.SensorDataGenerator import SensorDataGenerator
 from programmingtheiot.common.ConfigUtil import ConfigUtil
 from programmingtheiot.common import ConfigConst
@@ -40,11 +39,12 @@ class SensorAdapterManager(object):
 		self.useEmulator = useEmulator
 		self.pollRate = pollRate
 		
-		self.dataMsgListener = 0
+		
 		self.allowConfigOverride = allowConfigOverride
 		
 		self.scheduler = BackgroundScheduler()
 		self.scheduler.add_job(self.handleTelemetry, 'interval', seconds = self.pollRate)
+		self.dataMsgListener = None
 		
 		if(self.useEmulator == True):
 			logging.info("Emulators are being used")
@@ -107,25 +107,32 @@ class SensorAdapterManager(object):
 			self.temperatureSensorSimTask.generateTelemetry()
 			logging.info("Simulated Temperature Sensor value is %s ",self.temperatureSensorSimTask.getTelemetryValue())
 		elif(self.useEmulator == True):
-			self.humidityEmulator.generateTelemetry()
+			humidity = self.humidityEmulator.generateTelemetry()
 			logging.info("Emulated Humidity Sensor value is %s ",self.humidityEmulator.getTelemetryValue())
-			self.pressureEmulator.generateTelemetry()
+			
+			pressure = self.pressureEmulator.generateTelemetry()
 			logging.info("Emulated Pressure Sensor value is %s ",self.pressureEmulator.getTelemetryValue())
-			self.tempEmulator.generateTelemetry()
+			
+			temp = self.tempEmulator.generateTelemetry()
 			logging.info("Emulated Temperature Sensor value is %s ",self.tempEmulator.getTelemetryValue())
-		pass	
-
+			
+		self.dataMsgListener.handleSensorMessage(humidity)
+		self.dataMsgListener.handleSensorMessage(pressure)
+		self.dataMsgListener.handleSensorMessage(temp)
 
 		
 	def setDataMessageListener(self, listener: IDataMessageListener) -> bool:
 		if( listener != None):
 				self.dataMsgListener = listener
-		pass
+				logging.info("Setting listener")
+				return True
+			
+		return False
 	
 	def startManager(self):
 		self.scheduler.start()
-		pass
+	
 		
 	def stopManager(self):
 		self.scheduler.shutdown()
-		pass
+		

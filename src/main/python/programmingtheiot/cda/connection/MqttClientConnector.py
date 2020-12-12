@@ -67,7 +67,9 @@ class MqttClientConnector(IPubSubClient):
 		
 	def connectClient(self)->bool:
 		logging.info("Connecting MQTT broker: %s",self.host)
+		
 		if not self.mqttClient:
+			logging.info("-------------------------working----------------")
 			self.mqttClient = mqttClient.Client(client_id = self.clientID, clean_session = True)
 			self.mqttClient.on_connect = self.onConnect
 			self.mqttClient.on_disconnect = self.onDisconnect
@@ -82,6 +84,7 @@ class MqttClientConnector(IPubSubClient):
 		else:
 			logging.warn('MQTT client is already connected. Ignoring connect request.')
 			return False
+		self.mqttClient.publish(None, "dsdg", 1)
 	
 	def disconnectClient(self)->bool:
 		logging.info("Disconnecting MQTT broker: %s",self.host)
@@ -123,7 +126,7 @@ class MqttClientConnector(IPubSubClient):
 		pass
 	
 	def publishMessage(self, resource: ResourceNameEnum, msg, qos):
-		#logging.info("Called publishMessage %s", msg)
+		logging.info("Called publishMessage %s", msg)
 		topic = resource.value
 # 		if(resource == None):
 # 			return False
@@ -131,12 +134,14 @@ class MqttClientConnector(IPubSubClient):
 		if(qos < 0 or qos >2 ):
 			qos = IPubSubClient.DEFAULT_QOS
 		msgInfo = self.mqttClient.publish(topic=topic, payload=msg, qos=qos)
+		logging.info("Called publishMessage is called %s", msg)
 		msgInfo.wait_for_publish()
 		return True
 		
 	
 	def subscribeToTopic(self, resource: ResourceNameEnum, qos):
-		logging.info("Called subscribeToTopic %s", str(resource.getResourceNameByValue(resource)))
+# 		logging.info("Called subscribeToTopic %s", resource.value)
+# 		logging.info("Called subscribeToTopic %s", str(resource.getResourceNameByValue(resource)))
 		topic = resource.value
 		#else:
 		if(qos < 0 or qos >2 ):

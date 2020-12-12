@@ -25,7 +25,7 @@ from programmingtheiot.data.SensorData import SensorData
 from programmingtheiot.data.SystemPerformanceData import SystemPerformanceData
 
 from programmingtheiot.common.ConfigUtil import ConfigUtil
-from programmingtheiot.common import ConfigConst
+import programmingtheiot.common.ConfigConst as ConfigConst
 from programmingtheiot.data.DataUtil import DataUtil
 
 
@@ -57,36 +57,36 @@ class DeviceDataManager(IDataMessageListener):
 		self.triggerHvacTempFloor = self.configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.TRIGGER_HVAC_TEMP_FLOOR_KEY)
 		self.triggerHvacTempCeiling = self.configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.TRIGGER_HVAC_TEMP_CEILING_KEY)
 
-			
+	"""this method recieves the ActuatorData and also calls to handle upstream transmission"""		
 	def handleActuatorCommandResponse(self, data: ActuatorData) -> bool:
 		logging("handleActuatorCommandResponse method is called...")
 		d = self.dataUtil.actuatorDataToJson(data)
 		logging.info("Incoming actuator response received (from actuator manager):"+ d)
 		self._handleUpstreamTransmission(ResourceNameEnum.CDA_ACTUATOR_RESPONSE_RESOURCE, d)
-		pass
+		return True
 
-	
 	def handleIncomingMessage(self, resourceEnum: ResourceNameEnum, msg: str) -> bool:
 		logging("handleIncomingMessage method is called...") 
 		self._handleIncomingDataAnalysis(DataUtil.jsonToActuatorData(self, msg))
-		pass
+		return True
 
 	def handleSensorMessage(self, data: SensorData) -> bool:
-		logging("handleSensorMessage method is called...")
+		logging.info("handleSensorMessage method is called...")
 		self._handleUpstreamTransmission(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE, DataUtil.sensorDataToJson(self, data))
-		pass
+		self._handleSensorDataAnalysis(data)
+		return True
 		
 	def handleSystemPerformanceMessage(self, data: SystemPerformanceData) -> bool:
 		logging("handleSystemPerformanceMessage method is called...")
 		self._handleUpstreamTransmission(ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE, DataUtil.systemPerformanceDataToJson(self, data))
-		pass
-
-	
+		return True
+		
 	def startManager(self):
 		logging.info("Started DeviceDataManager.")
+		self.mqttClient.connectClient()
 		self.sysPerfManager.startManager()
 		self.sensorAdapterManager.startManager()
-		self.mqttClient.connectClient()
+		
 		pass
 
 		
@@ -117,12 +117,16 @@ class DeviceDataManager(IDataMessageListener):
 		1) Check config: Is there a rule or flag that requires immediate processing of data?
 		2) Act on data: If # 1 is true, determine what - if any - action is required, and execute.
 		"""
-		logging("_handleSensorDataAnalysis method is called...")
-		if(self.enableHandleTempChangeOnDevice == True):
-			self.actuatorData = ActuatorData ()
-			self.actuatorData.actuator_type = ActuatorData.HVAC_ACTUATOR_TYPE
-			self.actuatorData.COMMAND_ON
-			self.actuatorAdapterManager.sendActuatorCommand(self.actuatorData) 
+		logging.info("_handleSensorDataAnalysis method is called...")
+# 		if(self.enableHandleTempChangeOnDevice == True):
+		if(data.getValue() > self.triggerHvacTempCeiling):
+			logging.info("------------------sensor data handling called-------------------")
+			logging.info(f"{data.getValue()}<---sensor---limit--->{self.triggerHvacTempCeiling}")
+			ad = ActuatorData(actuatorType = ActuatorData.HVAC_ACTUATOR_TYPE)
+			ad.setValue(0)
+			ad.setCommand(ActuatorData.COMMAND_OFF)
+			print(ad)
+			self.actuatorAdapterManager.sendActuatorCommand(ad) 
 			pass
 		
 	def _handleUpstreamTransmission(self, resourceName: ResourceNameEnum, msg: str):
@@ -132,13 +136,15 @@ class DeviceDataManager(IDataMessageListener):
 		1) Check connection: Is there a client connection configured (and valid) to a remote MQTT or CoAP server?
 		2) Act on msg: If # 1 is true, send message upstream using one (or both) client connections.
 		"""
-		logging("_handleUpstreamTransmission method is called...")
-		MqttClientConnector.publishMessage(self, resourceName, msg, 1)
+		logging.info("_handleUpstreamTransmission method is called...")
+
+		self.mqttClient.subscribeToTopic( resourceName, 1)
+		self.mqttClient.publishMessage( resourceName, msg, 1)
 		pass
 	
 	def handleActuatorCommandMessage(self, data: ActuatorData) -> bool:
 		if data:
-			logging.info("Processing actuator command message.")
+			logging.info("-----------------Processing actuator command message.----------------")
 			
 			# TODO: add further validation before sending the command
 			self.actuatorAdapterManager.sendActuatorCommand(data)

@@ -32,7 +32,7 @@ class ActuatorAdapterManager(object):
 	dataMsgListener = None 
 
 	
-	def __init__(self, useEmulator: bool = False):
+	def __init__(self, useEmulator: bool = True):
 		self.useEmulator = useEmulator
 		if(self.useEmulator == True):
 			logging.info("Emulators will be used")
@@ -61,6 +61,8 @@ class ActuatorAdapterManager(object):
 
 	def sendActuatorCommand(self, data: ActuatorData) -> bool:
 		logging.info("Actuator command received. Processing...")
+		print("print ActuatorData")
+		print(data)
 		if(self.useEmulator == False):
 			if(data.type == data.HUMIDIFIER_ACTUATOR_TYPE):
 				if(data.getCommand()==0):
@@ -71,7 +73,7 @@ class ActuatorAdapterManager(object):
 					logging.info("Emulating HUMIDIFIER actuator ON:")
 					logging.info(" Humidifier value : %s", data.getValue())       
 					return True
-			elif (data.type == data.HVAC_ACTUATOR_TYPE):
+			elif (data.type == ActuatorData.HVAC_ACTUATOR_TYPE):
 				if(data.getCommand()==0):
 					logging.info("Emulating HVAC actuator OFF:")
 					logging.info("---------------------------------------")
@@ -81,6 +83,8 @@ class ActuatorAdapterManager(object):
 					logging.info(" HVAC value : %s", data.getValue())
 					return True
 		elif(self.useEmulator == True):
+			logging.info("sendActuatorManager emulator in ActuatorAdapterManager running with Emulator Enabled")
+			logging.info(data.type)
 			if(data.type == data.HUMIDIFIER_ACTUATOR_TYPE):
 				if(data.getCommand()==0):
 					logging.info("Emulating HUMIDIFIER actuator OFF:")
@@ -91,17 +95,16 @@ class ActuatorAdapterManager(object):
 					logging.info(" Humidifier value : %s",data.getValue())
 					self.humidifierEmulator._handleActuation(data.getCommand(), data.getValue())
 					return True
-			elif (data.type == data.HVAC_ACTUATOR_TYPE):
+			elif (data.type == ActuatorData.HVAC_ACTUATOR_TYPE):
 				if(data.getCommand()==0):
-					logging.info("Emulating HVAC actuator OFF:")
+					logging.info("---Emulating HVAC actuator OFF:")
 					logging.info("---------------------------------------")
+					self.hvacEmulator._handleActuation(data.getCommand(), data.getValue())
 					return False
 				else:
 					logging.info("Emulating HVAC actuator ON:")
 					logging.info(" HVAC value : %s",data.getValue())
 					self.hvacEmulator._handleActuation(data.getCommand(), data.getValue())
-					
-					
 					return True           
 			
 	def setDataMessageListener(self, listener: IDataMessageListener) -> bool:
