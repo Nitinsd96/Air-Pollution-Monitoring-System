@@ -9,14 +9,21 @@ Be sure to implement all the PIOT-CDA-* issues (requirements) listed at [PIOT-IN
 NOTE: Include two full paragraphs describing your implementation approach by answering the questions listed below.
 
 What does your implementation do? 
+-
+I am trying to monitor Air pollution levels through this system. This system can help the users to stay updated with air levels of their surroundings. Moreover, they will get to know when the air is polluted or gas is leaked. This system can help them by giving heads up prior to such situation.
 
 How does your implementation work?
+- Using gas sensors to predict air levels
+- Using CDA to store and send data to GDA
+- Communication using MQTT between CDA and GDA
+- Using ubidots to store and analyse data to predict whether the levels are good/bad
+- sending notification to phone in case of emergency
 
 ### Code Repository and Branch
 
 NOTE: Be sure to include the branch (e.g. https://github.com/programming-the-iot/python-components/tree/alpha001).
 
-URL: 
+URL: https://github.com/NU-CSYE6530-Fall2020/constrained-device-app-Nitinsd96/tree/chapter12
 
 ### UML Design Diagram(s)
 
@@ -24,6 +31,7 @@ NOTE: Include one or more UML designs representing your solution. It's expected 
 diagram you provide will look similar to, but not the same as, its counterpart in the
 book [Programming the IoT](https://learning.oreilly.com/library/view/programming-the-internet/9781492081401/).
 
+![UML Diagram](Capture.JPG "UML")
 
 ### Unit Tests Executed
 
@@ -42,7 +50,7 @@ some exceptions (such as your cloud connectivity tests). In such cases, they'll 
 your code to ensure it's correct. As for the tests you execute, you only need to list each
 test case below (e.g. SensorSimAdapterManagerTest, DeviceDataManagerTest, etc.)
 
-- 
+- ConstrainedDeviceApp
 - 
 - 
 
