@@ -128,6 +128,7 @@ class MqttClientConnector(IPubSubClient):
 	def publishMessage(self, resource: ResourceNameEnum, msg, qos):
 		logging.info("Called publishMessage %s", msg)
 		topic = resource.value
+		logging.info("Topic name is %s", topic)
 # 		if(resource == None):
 # 			return False
 # 		#else:

@@ -6,12 +6,27 @@
 #
 
 #
+# Cloud client configuration information
+#
+[Cloud.GatewayService]
+credFile       = /Users/prince/Documents/CloudKey.props
+certFile       = /Users/prince/Documents/industrial.pem
+host           = industrial.api.ubidots.com
+port           = 1883
+securePort     = 8883
+defaultQoS     = 0
+keepAlive      = 30
+enableCrypt    = True
+baseUrl        = https://things.ubidots.com/api/v1.6/
+baseTopic      = /v1.6/devices/
+
+#
 # MQTT client configuration information
 #
 [Mqtt.GatewayService]
 credFile       = ./cred/PiotMqttCred.props
 certFile       = ./cert/PiotMqttLocalCertFile.pem
-host           = localhost
+host           = 73.241.66.109
 port           = 1883
 securePort     = 1884
 defaultQoS     = 0
