@@ -126,7 +126,7 @@ class MqttClientConnector(IPubSubClient):
 		pass
 	
 	def publishMessage(self, resource: ResourceNameEnum, msg, qos):
-		logging.info("Called publishMessage %s", msg)
+# 		logging.info("Called publishMessage %s", msg)
 		topic = resource.value
 		logging.info("Topic name is %s", topic)
 # 		if(resource == None):
@@ -135,7 +135,7 @@ class MqttClientConnector(IPubSubClient):
 		if(qos < 0 or qos >2 ):
 			qos = IPubSubClient.DEFAULT_QOS
 		msgInfo = self.mqttClient.publish(topic=topic, payload=msg, qos=qos)
-		logging.info("Called publishMessage is called %s", msg)
+# 		logging.info("Called publishMessage is called %s", msg)
 		msgInfo.wait_for_publish()
 		return True
 		

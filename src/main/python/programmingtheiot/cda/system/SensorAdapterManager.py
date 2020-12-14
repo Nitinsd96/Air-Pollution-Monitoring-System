@@ -96,6 +96,7 @@ class SensorAdapterManager(object):
 		
 	"""
 	Displaying sensor values on console by calling Simulator/Emulator methods as per useEmulator flag
+	and using listener to send callback to DeviceDataManager
 	"""
 	
 	def handleTelemetry(self):

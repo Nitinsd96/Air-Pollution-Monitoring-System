@@ -51,7 +51,7 @@ class LedDisplayEmulatorTask(BaseActuatorSimTask):
 			
 		else:
 			#clear LED display
-			Text_to_Display = "Clearing Data"
+			Text_to_Display = "ALARM : Temperature is High"
 			self.sh.screen.scroll_text(Text_to_Display)
 			self.sh.screen.clear()
 		

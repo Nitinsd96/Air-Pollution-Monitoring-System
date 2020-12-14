@@ -35,7 +35,12 @@ class SystemPerformanceManager(object):
 
 		
 	def setDataMessageListener(self, listener: IDataMessageListener) -> bool:
-		pass
+		if( listener != None):
+				self.dataMsgListener = listener
+				logging.info("Setting listener")
+				return True
+			
+		return False
 	
 	def startManager(self):
 		logging.info("Manager Started...!!!")

@@ -3,3 +3,4 @@
 **/cred
 **/venv
 
+./src/main/python/programmingtheiot/cda/extra/industrial.cert

@@ -28,7 +28,12 @@ from programmingtheiot.common.ConfigUtil import ConfigUtil
 import programmingtheiot.common.ConfigConst as ConfigConst
 from programmingtheiot.data.DataUtil import DataUtil
 
+from programmingtheiot.cda.extra import temp
+from programmingtheiot.cda.extra import pressure
+from programmingtheiot.cda.extra import humidity
 
+
+import json
 
 class DeviceDataManager(IDataMessageListener):
 	"""
@@ -57,25 +62,34 @@ class DeviceDataManager(IDataMessageListener):
 		self.triggerHvacTempFloor = self.configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.TRIGGER_HVAC_TEMP_FLOOR_KEY)
 		self.triggerHvacTempCeiling = self.configUtil.getFloat(ConfigConst.CONSTRAINED_DEVICE, ConfigConst.TRIGGER_HVAC_TEMP_CEILING_KEY)
 
-	"""this method recieves the ActuatorData and also calls to handle upstream transmission"""		
+	"""this method receives the ActuatorData and also calls to handle upstream transmission"""		
 	def handleActuatorCommandResponse(self, data: ActuatorData) -> bool:
 		logging("handleActuatorCommandResponse method is called...")
 		d = self.dataUtil.actuatorDataToJson(data)
 		logging.info("Incoming actuator response received (from actuator manager):"+ d)
 		self._handleUpstreamTransmission(ResourceNameEnum.CDA_ACTUATOR_RESPONSE_RESOURCE, d)
 		return True
-
+	
+	"""To Perform some actuation if value of some sensor is high or low"""
 	def handleIncomingMessage(self, resourceEnum: ResourceNameEnum, msg: str) -> bool:
 		logging("handleIncomingMessage method is called...") 
 		self._handleIncomingDataAnalysis(DataUtil.jsonToActuatorData(self, msg))
 		return True
-
+	
+	
+	"""
+	Listener is sending Sensor data to this method
+	Use this method to call Upstream so as to send data data to GDA
+	"""
 	def handleSensorMessage(self, data: SensorData) -> bool:
 		logging.info("handleSensorMessage method is called...")
 		self._handleUpstreamTransmission(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE, DataUtil.sensorDataToJson(self, data))
 		self._handleSensorDataAnalysis(data)
 		return True
-		
+	"""
+	Listener is sending SystemPerformancedata to this method
+	USe this method to call Upstream to send Data to GDA
+	"""
 	def handleSystemPerformanceMessage(self, data: SystemPerformanceData) -> bool:
 		logging("handleSystemPerformanceMessage method is called...")
 		self._handleUpstreamTransmission(ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE, DataUtil.systemPerformanceDataToJson(self, data))
@@ -119,15 +133,25 @@ class DeviceDataManager(IDataMessageListener):
 		"""
 		logging.info("_handleSensorDataAnalysis method is called...")
 # 		if(self.enableHandleTempChangeOnDevice == True):
-		if(data.getValue() > self.triggerHvacTempCeiling):
-			logging.info("------------------sensor data handling called-------------------")
-			logging.info(f"{data.getValue()}<---sensor---limit--->{self.triggerHvacTempCeiling}")
+		if(data.sensorType==1 and data.getValue() > 50):
+			ad = ActuatorData(actuatorType = ActuatorData.HUMIDIFIER_ACTUATOR_TYPE)
+			ad.setValue(0)
+			ad.setCommand(ActuatorData.COMMAND_OFF)
+			print(ad)
+			self.actuatorAdapterManager.sendActuatorCommand(ad) 
+		if(data.sensorType==2 and data.getValue() > 700):
 			ad = ActuatorData(actuatorType = ActuatorData.HVAC_ACTUATOR_TYPE)
 			ad.setValue(0)
 			ad.setCommand(ActuatorData.COMMAND_OFF)
 			print(ad)
 			self.actuatorAdapterManager.sendActuatorCommand(ad) 
-			pass
+		if(data.sensorType==3 and data.getValue() > 40):
+			ad = ActuatorData(actuatorType = ActuatorData.LED_DISPLAY_ACTUATOR_TYPE)
+			ad.setValue(0)
+			ad.setCommand(ActuatorData.COMMAND_OFF)
+			print(ad)
+			self.actuatorAdapterManager.sendActuatorCommand(ad) 
+			
 		
 	def _handleUpstreamTransmission(self, resourceName: ResourceNameEnum, msg: str):
 		"""
@@ -137,11 +161,27 @@ class DeviceDataManager(IDataMessageListener):
 		2) Act on msg: If # 1 is true, send message upstream using one (or both) client connections.
 		"""
 		logging.info("_handleUpstreamTransmission method is called...")
-
+		print("=======================================================")
+		print(msg)
+		print("=======================================================")
+		msg_dict=json.loads(msg)	
+		new_dict={}
+		new_dict[msg_dict["name"]]=msg_dict["sensorValue"]
+		if msg_dict["sensorType"]==1:
+			print()
+# 			humidity.send(new_dict)
+		elif msg_dict["sensorType"]==2:
+			new_dict["GAS Sensor"] = msg_dict["sensorValue"]
+			new_dict.pop(msg_dict["name"],None)
+# 			pressure.send(new_dict)
+		elif msg_dict["sensorType"]==3:
+# 			temp.send(new_dict)
+			print()
+		print(new_dict)
 		self.mqttClient.subscribeToTopic( resourceName, 1)
 		self.mqttClient.publishMessage( resourceName, msg, 1)
-		pass
-	
+		
+	"""Sending apropriate Actuation"""
 	def handleActuatorCommandMessage(self, data: ActuatorData) -> bool:
 		if data:
 			logging.info("-----------------Processing actuator command message.----------------")

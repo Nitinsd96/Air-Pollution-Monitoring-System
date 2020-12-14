@@ -55,7 +55,7 @@ class HvacEmulatorTask(BaseActuatorSimTask):
 		else:
 			if self.sh.screen:
 			# create a message with an 'OFF' message, then scroll it across the LED display
-				Text_to_display = " Device OFF"
+				Text_to_display = " ALARM : GAS LEAK "
 				self.sh.screen.scroll_text(Text_to_display)
 			else:
 				logging.warning("No SenseHAT LED screen instance to clear / close.")

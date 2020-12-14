@@ -47,14 +47,11 @@ class BaseIotData(object):
 		
 		"""
 		if d:
-			print("d is running")
 			self.name = d['name']
 			self.timeStamp = d['timeStamp']
 			self.hasError = d['hasError']
 			self.statusCode = d['statusCode']
 		else:
-			print("else is running")
-			print(name)
 			self.updateTimeStamp()
 			self.name = name
 			self.hasError = False

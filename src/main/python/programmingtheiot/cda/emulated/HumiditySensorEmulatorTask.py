@@ -43,5 +43,4 @@ class HumiditySensorEmulatorTask(BaseSensorSimTask):
 		sensorVal = self.sh.environ.humidity		
 		sensorData.setValue(sensorVal)
 		self.LatestSensorData = sensorData
-		print("-------Sensor Type %s and Value %s--------- ",str(self.LatestSensorData.sensorType),str(self.LatestSensorData.sensorValue))
 		return self.LatestSensorData
