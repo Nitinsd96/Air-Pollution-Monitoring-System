@@ -16,7 +16,7 @@ global variables
 connected = False  # Stores the connection status
 BROKER_ENDPOINT = "industrial.api.ubidots.com"
 TLS_PORT = 8883  # Secure port
-MQTT_USERNAME = "BBFF-xEcKSLvXSAOv5v0ojzd3MpHMs84unj"  # Put here your Ubidots TOKEN
+MQTT_USERNAME = ""  # Put here your Ubidots TOKEN
 MQTT_PASSWORD = ""  # Leave this in blank
 TOPIC = "/v1.6/devices/"
 DEVICE_LABEL = "IoT"
